@@ -9,7 +9,9 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@e-mine/react-native-html-text": "^0.3.3",
     "@expo/webpack-config": "^0.17.2",
+    "@react-native-community/checkbox": "^0.5.12",
     "dom": "18.0.0",
     "expo": "~46.0.9",
     "expo-status-bar": "~1.4.0",

@@ -1,20 +1,154 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import {Text, Image, View, ScrollView, StyleSheet, SafeAreaView} from "react-native";
 
-export default function App() {
+export default function App () {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <SafeAreaView>
+        <SafeAreaView>
+				<Image style = {stylesheet.styleImage10} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
+				</SafeAreaView>
+        <View style = {stylesheet.styleWrapButton}>
+					<View style = {stylesheet.styleButton}>
+						<Text style = {stylesheet.styleText}>
+							{`Login`}
+						</Text>
+					</View>
+				</View>
+				<View style = {stylesheet.styleWrapButtonCopy1}>
+					<View style = {stylesheet.styleButtonCopy1}>
+						<Text style = {stylesheet.styleTextCopy1}>
+							{`Register`}
+						</Text>
+					</View>
+				</View>
+				<View style = {stylesheet.stylePreset}>
+					<Text style = {stylesheet.styleFindNearYou}>
+						{`FoxLift`}
+					</Text>
+				</View>
+		</SafeAreaView>
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const stylesheet = StyleSheet.create({
+ 	styleImage10: {
+		position: "absolute",
+		left: 46,
+		top: 8,
+		borderRadius: 0,
+		width: 284,
+		height: 142,
+	},
+	styleText: {
+		flexBasis: 0,
+		flexGrow: 1,
+		width: "auto",
+		color: "rgba(249, 249, 249, 1)",
+		fontSize: 16,
+		fontFamily: "SFProDisplay_400Regular",
+		letterSpacing: -0.5,
+		fontStyle: "normal",
+		fontWeight: "500",
+		textAlign: "center",
+		height: "auto",
+		lineHeight: 18.8,
+	},
+	styleButton: {
+		width: "100%",
+		height: "auto",
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 12,
+		borderRadius: 10,
+		backgroundColor: "rgba(126, 88, 255, 1)",
+	},
+	styleWrapButton: {
+		position: "absolute",
+		left: 0.3571428571428896,
+		right: -0.3571428571428896,
+		top: 388.42857142857116,
+		width: "auto",
+		height: "auto",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		paddingTop: 12,
+		paddingRight: 16,
+		paddingBottom: 12,
+		paddingLeft: 16,
+	},
+	styleTextCopy1: {
+		flexBasis: 0,
+		flexGrow: 1,
+		width: "auto",
+		color: "rgba(249, 249, 249, 1)",
+		fontSize: 16,
+		fontFamily: "SFProDisplay_400Regular",
+		letterSpacing: -0.5,
+		fontStyle: "normal",
+		fontWeight: "500",
+		textAlign: "center",
+		height: "auto",
+		lineHeight: 18.8,
+	},
+	styleButtonCopy1: {
+		width: "100%",
+		height: "auto",
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 12,
+		borderRadius: 10,
+		backgroundColor: "rgba(126, 88, 255, 1)",
+	},
+	styleWrapButtonCopy1: {
+		position: "absolute",
+		left: 0.3571428571428896,
+		right: -0.3571428571428896,
+		top: 321.4285714285712,
+		width: "auto",
+		height: "auto",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		paddingTop: 12,
+		paddingRight: 16,
+		paddingBottom: 12,
+		paddingLeft: 16,
+	},
+	styleFindNearYou: {
+		position: "absolute",
+		left: 16,
+		top: 16,
+		width: 345,
+		color: "rgba(255, 69, 69, 1)",
+		fontSize: 48,
+		fontFamily: "Arial",
+		letterSpacing: -0.09000000357627869,
+		fontStyle: "normal",
+		fontWeight: "700",
+		textAlign: "center",
+		height: "auto",
+		lineHeight: 48,
+	},
+	stylePreset: {
+		position: "absolute",
+		left: 1.7142857142857792,
+		right: -1.7142857142857792,
+		top: 208.00000000000006,
+		width: "auto",
+		height: "auto",
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 16,
+		backgroundColor: "rgba(255, 255, 255, 1)",
+	},
+
 });
