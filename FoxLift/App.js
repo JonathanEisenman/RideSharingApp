@@ -6,6 +6,7 @@ export default function App () {
     <SafeAreaView>
         <SafeAreaView>
 				<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
+				<Image style = {stylesheet.styleImage3} source = {require("./images/googleButton.png")} />
 				<Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
 				</SafeAreaView>
         <View style = {stylesheet.styleWrapButton}>
@@ -29,7 +30,8 @@ export default function App () {
 const stylesheet = StyleSheet.create({
  	styleImage1: {
 		position: "absolute",
-		right: 40,
+		alignContent: "center",
+		right: 30,
 		top: 30,
 		borderRadius: 0,
 		width: 400,
@@ -37,11 +39,20 @@ const stylesheet = StyleSheet.create({
 	},
 	styleImage2: {
 		position: "absolute",
+		alignContent: "center",
 		left: 60,
 		top: 650,
 		borderRadius: 0,
 		width: 284,
 		height: 142,
+	},
+	styleImage3: {
+		position: "absolute",
+		alignContent: "center",
+		top: 450,
+		borderRadius: 0,
+		width: 250,
+		height: 30,
 	},
 	styleText: {
 		flexBasis: 0,
@@ -66,7 +77,7 @@ const stylesheet = StyleSheet.create({
 		alignItems: "center",
 		padding: 12,
 		borderRadius: 10,
-		backgroundColor: "rgba(126, 88, 255, 1)",
+		backgroundColor: "red",
 	},
 	styleWrapButton: {
 		position: "absolute",
@@ -107,7 +118,7 @@ const stylesheet = StyleSheet.create({
 		alignItems: "center",
 		padding: 12,
 		borderRadius: 10,
-		backgroundColor: "rgba(126, 88, 255, 1)",
+		backgroundColor: "red",
 	},
 	styleWrapButtonCopy1: {
 		position: "absolute",
