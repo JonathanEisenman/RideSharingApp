@@ -5,6 +5,7 @@ export default function App () {
   return (
     <SafeAreaView>
         <SafeAreaView>
+				<Image source = {require("images/FoxLift-1.png")} />
 				<Image style = {stylesheet.styleImage10} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
 				</SafeAreaView>
         <View style = {stylesheet.styleWrapButton}>
