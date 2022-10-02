@@ -1,7 +1,8 @@
 import React from "react";
-import {Text, Image, View, ScrollView, StyleSheet, SafeAreaView} from "react-native";
+import {Text, Image, View, ScrollView, StyleSheet, SafeAreaView, Button, Alert} from "react-native";
 
-export default function App () {
+
+export default function Launch () {
   return (
     <SafeAreaView>
         <SafeAreaView>
@@ -9,6 +10,10 @@ export default function App () {
 				<Image style = {stylesheet.styleImage3} source = {require("./images/googleButton.png")} />
 				<Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
 				</SafeAreaView>
+				<Button
+               onPress={() => {}}
+               title="Press Me"
+             />
         <View style = {stylesheet.styleWrapButton}>
 					<View style = {stylesheet.styleButton}>
 						<Text style = {stylesheet.styleText}>
@@ -25,6 +30,34 @@ export default function App () {
 				</View>
 		</SafeAreaView>
   )
+}
+
+function Home()
+{
+	return (
+		<SafeAreaView>
+			<SafeAreaView>
+					<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
+					<Image style = {stylesheet.styleImage3} source = {require("./images/googleButton.png")} />
+					<Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
+					</SafeAreaView>
+	
+			<View style = {stylesheet.styleWrapButton}>
+						<View style = {stylesheet.styleButton}>
+							<Text style = {stylesheet.styleText}>
+								{`Logi`}
+							</Text>
+						</View>
+					</View>
+					<View style = {stylesheet.styleWrapButtonCopy1}>
+						<View style = {stylesheet.styleButtonCopy1}>
+							<Text style = {stylesheet.styleTextCopy1}>
+								{`Register`}
+							</Text>
+						</View>
+					</View>
+			</SafeAreaView>
+	  )
 }
 
 const stylesheet = StyleSheet.create({
