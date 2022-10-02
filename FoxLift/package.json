@@ -12,13 +12,16 @@
     "@e-mine/react-native-html-text": "^0.3.3",
     "@expo/webpack-config": "^0.17.2",
     "@react-native-community/checkbox": "^0.5.12",
+    "@react-navigation/native": "^6.0.13",
+    "@react-navigation/native-stack": "^6.9.0",
     "dom": "0.0.3",
     "expo": "^46.0.13",
     "expo-status-bar": "~1.4.0",
     "react": "18.0.0",
     "react-dom": "^18.0.0",
     "react-native": "0.69.6",
-    "react-native-web": "^0.18.9"
+    "react-native-web": "^0.18.9",
+    "react-navigation": "^4.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"
