@@ -5,8 +5,8 @@ export default function App () {
   return (
     <SafeAreaView>
         <SafeAreaView>
-				<Image source = {require("images/FoxLift-1.png")} />
-				<Image style = {stylesheet.styleImage10} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
+				<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
+				<Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
 				</SafeAreaView>
         <View style = {stylesheet.styleWrapButton}>
 					<View style = {stylesheet.styleButton}>
@@ -22,20 +22,23 @@ export default function App () {
 						</Text>
 					</View>
 				</View>
-				<View style = {stylesheet.stylePreset}>
-					<Text style = {stylesheet.styleFindNearYou}>
-						{`FoxLift`}
-					</Text>
-				</View>
 		</SafeAreaView>
   )
 }
 
 const stylesheet = StyleSheet.create({
- 	styleImage10: {
+ 	styleImage1: {
 		position: "absolute",
-		left: 46,
-		top: 8,
+		right: 40,
+		top: 30,
+		borderRadius: 0,
+		width: 400,
+		height: 200,
+	},
+	styleImage2: {
+		position: "absolute",
+		left: 60,
+		top: 650,
 		borderRadius: 0,
 		width: 284,
 		height: 142,
