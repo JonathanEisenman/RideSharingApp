@@ -2621,6 +2621,11 @@ big.js@^5.2.2:
   resolved "https://registry.yarnpkg.com/big.js/-/big.js-5.2.2.tgz#65f0af382f578bcdc742bd9c281e9cb2d7768328"
   integrity sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==
 
+bignumber.js@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/bignumber.js/-/bignumber.js-9.0.0.tgz#805880f84a329b5eac6e7cb6f8274b6d82bdf075"
+  integrity sha512-t/OYhhJ2SD+YGBQcjY8GzzDHEk9f3nerxjtfa6tlMXfe7frs/WozhvCNoGvpM0P3bNf3Gq5ZRMlGr5f3r4/N8A==
+
 binary-extensions@^1.0.0:
   version "1.13.1"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-1.13.1.tgz#598afe54755b2868a5330d2aff9d4ebb53209b65"
@@ -2683,7 +2688,7 @@ body-parser@1.19.0:
     raw-body "2.4.0"
     type-is "~1.6.17"
 
-body-parser@1.20.0:
+body-parser@1.20.0, body-parser@^1.20.0:
   version "1.20.0"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.0.tgz#3de69bd89011c11573d7bfee6a64f11b6bd27cc5"
   integrity sha512-DfJ+q6EPcGKZD1QWUjSpqp+Q7bDQTsQIF4zfUAtZ6qk+H/3/QRhg9CEp39ss+/T2vw0+HaidC0ecJj/DRLIaKg==
@@ -4461,10 +4466,10 @@ expo-modules-autolinking@0.10.3:
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@0.11.5:
-  version "0.11.5"
-  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.11.5.tgz#19d30e9b24b0b98ea614df3cb474293133a08bd4"
-  integrity sha512-KmTHtaL21M1AzKOmu3YM5K8ddCbbr6wgooG4uCb+o+7zZXe+BPP4jAPs5LLez1Et34OQcyjopxUpJ8r43HImvQ==
+expo-modules-core@0.11.6:
+  version "0.11.6"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-0.11.6.tgz#0fb166ce6c18def4bfef7a617d4ba8b20cd87d9f"
+  integrity sha512-Z3DSfyLCag5JxMas+rdPbb8PzhN0F7v0GGx2VuaiC3QvIITrybdRS5lJaXlsfqrJZ36j80p3ZKzfMjMX/RF9kA==
   dependencies:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
@@ -4484,10 +4489,10 @@ expo-status-bar@~1.4.0:
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.4.0.tgz#c0317de2c53878340f4b4f00ff7e4ba14399a7fb"
   integrity sha512-vh98g8qMIjig/2XTBsoAWS6Vo2dIIwDWjB3/GiuZ9Lazpxc9GO/APfJ4dar7MibzIDUKIrjotrcL6rLdPH13Ew==
 
-expo@^46.0.13:
-  version "46.0.13"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.13.tgz#86bb45ca3b0aa71d028129f2eb6e1292a750cd72"
-  integrity sha512-xaU8GlJ7j3vo1U5tSbFDsoJqUfTkRF4XDEUj/Dr/jqUf0GcvlMKuGe6HvnbMO9slxYQlYlWJUzvlAx38TLhxyA==
+expo@^46.0.14:
+  version "46.0.14"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-46.0.14.tgz#bdb134fbc73f806f3d92a385c00d34a778e11973"
+  integrity sha512-l44Dn1/eXLoUOyXevffpKgQhqsf4PEB8bUp7aR97C7Hlcg7Rx9dbv7sTh8wV0M6ylJ+2M1kB5GgNX+CCuIwiSQ==
   dependencies:
     "@babel/runtime" "^7.14.0"
     "@expo/cli" "0.3.1"
@@ -4501,7 +4506,7 @@ expo@^46.0.13:
     expo-font "~10.2.1"
     expo-keep-awake "~10.2.0"
     expo-modules-autolinking "0.10.3"
-    expo-modules-core "0.11.5"
+    expo-modules-core "0.11.6"
     fbemitter "^3.0.0"
     getenv "^1.0.0"
     invariant "^2.2.4"
@@ -4512,7 +4517,7 @@ expo@^46.0.13:
   optionalDependencies:
     expo-error-recovery "~3.2.0"
 
-express@^4.17.1:
+express@^4.17.1, express@^4.18.1:
   version "4.18.1"
   resolved "https://registry.yarnpkg.com/express/-/express-4.18.1.tgz#7797de8b9c72c857b9cd0e14a5eea80666267caf"
   integrity sha512-zZBcOX9TfehHQhtupq57OF8lFZ3UZi08Y97dwFCkD8p9d/d2Y3M+ykKcwaMDEL+4qyUolgBDX6AblpR3fL212Q==
@@ -7056,6 +7061,16 @@ mv@~2:
     ncp "~2.0.0"
     rimraf "~2.4.0"
 
+mysql@^2.18.1:
+  version "2.18.1"
+  resolved "https://registry.yarnpkg.com/mysql/-/mysql-2.18.1.tgz#2254143855c5a8c73825e4522baf2ea021766717"
+  integrity sha512-Bca+gk2YWmqp2Uf6k5NFEurwY/0td0cpebAucFpY/3jhrwrVGuxU2uQFCHjU19SJfje0yQvi+rVWdq78hR5lig==
+  dependencies:
+    bignumber.js "9.0.0"
+    readable-stream "2.3.7"
+    safe-buffer "5.1.2"
+    sqlstring "2.3.1"
+
 mz@^2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/mz/-/mz-2.7.0.tgz#95008057a56cafadc2bc63dde7f9ff6955948e32"
@@ -8579,7 +8594,7 @@ react@18.0.0:
   dependencies:
     loose-envify "^1.1.0"
 
-"readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
+"readable-stream@1 || 2", readable-stream@2.3.7, readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
   integrity sha512-Ebho8K4jIbHAxnuxi7o42OrZgF/ZTNcsZj6nRKyUmkhLFq8CHItp/fy6hQZuZmP/n3yZ9VBUbp4zz/mX8hmYPw==
@@ -9384,6 +9399,11 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==
+
+sqlstring@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/sqlstring/-/sqlstring-2.3.1.tgz#475393ff9e91479aea62dcaf0ca3d14983a7fb40"
+  integrity sha512-ooAzh/7dxIG5+uDik1z/Rd1vli0+38izZhGzSa34FwR7IbelPWCCKSNIl8jlL/F7ERvy8CB2jNeM1E9i9mXMAQ==
 
 ssri@^6.0.1:
   version "6.0.2"
