@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { MaterialCommuityIcons } from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 const Stack = createStackNavigator();
@@ -50,6 +51,8 @@ function Launch({ navigation }) {
 						</Text>
 					</View>
 				</View>
+
+				
 		</SafeAreaView>
 	)
 
@@ -57,36 +60,62 @@ function Launch({ navigation }) {
 
 function Home({ navigation }) {
 
-  const onPressHandler = () => {
-    // navigation.navigate('Screen_A');
-    navigation.goBack();
+  const onPressHandlerActivity = () => {
+	navigation.navigate('Activity');
   }
+  const onPressHandlerMessages = () => {
+	navigation.navigate('Messages');
+  }
+  const onPressHandlerProfile = () => {
+	navigation.navigate('Profile');
+  }
+
 
   return (
 	<SafeAreaView>
-		<Button
-		title='hello'
-					onPress = {onPressHandler}
-						/>
 		<SafeAreaView>
 				<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
-				<Image style = {stylesheet.styleImage3} source = {require("./images/googleButton.png")} />
 		</SafeAreaView>
-		<View style = {stylesheet.styleWrapButton}>
-					<View style = {stylesheet.styleButton}>
-						<Text style = {stylesheet.styleText}>
-							{`Login`}
-						</Text>
-					</View>
-				</View>
-				<View style = {stylesheet.styleWrapButtonCopy1}>
-					<View style = {stylesheet.styleButtonCopy1}>
-						<Text style = {stylesheet.styleTextCopy1}>
-							{`Register`}
-						</Text>
-					</View>
-				</View>
+				<Button
+				title="Activity"
+				onPress={onPressHandlerActivity}
+				/>
+				<Button
+				title='Messages'
+				onPress={onPressHandlerMessages}
+				/>
+				<Button
+				title='Profile'
+				onPress={onPressHandlerProfile}
+				/>
 		</SafeAreaView>
+	)
+}
+
+function Activity({ navigation }) {
+	return (
+		<SafeAreaView>
+			<Text> Activity Screen</Text>
+		</SafeAreaView>
+	)
+}
+
+function Messages({ navigation }) {
+	return (
+		<SafeAreaView>
+			<Text> Messages Screen</Text>
+		</SafeAreaView>
+	)
+}
+
+function Profile({ navigation }) {
+
+	return (
+		<SafeAreaView>
+			<Text> Profile Screen</Text>
+		</SafeAreaView>
+	
+		
 	)
 }
 
@@ -109,6 +138,18 @@ function App() {
           name="Home"
           component={Home}
         />
+		<Stack.Screen
+		name="Activity"
+		component={Activity}
+		/>
+		<Stack.Screen
+		name="Messages"
+		component={Messages}
+		/>
+		<Stack.Screen
+		  name="Profile"
+		  component={Profile}
+		/>
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -250,6 +291,8 @@ const stylesheet = StyleSheet.create({
 	   padding: 16,
 	   backgroundColor: "rgba(255, 255, 255, 1)",
    },
+
+
 })
 
 export default App;
