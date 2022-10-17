@@ -11,11 +11,13 @@ import {
   Button, 
   Alert, 
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  TextInput
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommuityIcons } from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Icon } from 'react-native-vector-icons/FontAwesome';
 
 
 const Stack = createStackNavigator();
@@ -28,31 +30,36 @@ function Launch({ navigation }) {
 
   return (
 	<SafeAreaView>
+
 		<Button
-		title='hello'
-					onPress = {onPressHandler}
-						/>
+			title='Home'
+			onPress = {onPressHandler}
+		/>
 		<SafeAreaView>
 				<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
 				<Image style = {stylesheet.styleImage3} source = {require("./images/googleButton.png")} />
 				<Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
 		</SafeAreaView>
+		<TouchableOpacity onPress={onPressHandler}>
 		<View style = {stylesheet.styleWrapButton}>
 					<View style = {stylesheet.styleButton}>
 						<Text style = {stylesheet.styleText}>
 							{`Login`}
 						</Text>
 					</View>
-				</View>
-				<View style = {stylesheet.styleWrapButtonCopy1}>
+				</View>	
+		</TouchableOpacity>
+		
+		<TouchableOpacity onPress={onPressHandler}>
+							<View style = {stylesheet.styleWrapButtonCopy1}>
 					<View style = {stylesheet.styleButtonCopy1}>
 						<Text style = {stylesheet.styleTextCopy1}>
 							{`Register`}
 						</Text>
 					</View>
 				</View>
-
-				
+		</TouchableOpacity>
+	
 		</SafeAreaView>
 	)
 
@@ -76,18 +83,25 @@ function Home({ navigation }) {
 		<SafeAreaView>
 				<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
 		</SafeAreaView>
-				<Button
-				title="Activity"
-				onPress={onPressHandlerActivity}
-				/>
-				<Button
-				title='Messages'
-				onPress={onPressHandlerMessages}
-				/>
-				<Button
-				title='Profile'
-				onPress={onPressHandlerProfile}
-				/>
+				<View style = {stylesheet.styleActivityButton}>
+					<Button
+					title="Activity"
+					onPress={onPressHandlerActivity}
+					/>
+				</View>	
+
+				<View style= {stylesheet.styleMessagesButton}>
+					<Button
+					title="Messages"
+					onPress={onPressHandlerMessages}
+					/>
+				</View>
+				<View style= {stylesheet.styleProfileButton}>
+					<Button
+					title="Profile"
+					onPress={onPressHandlerProfile}
+					/>
+				</View>		
 		</SafeAreaView>
 	)
 }
@@ -110,11 +124,119 @@ function Messages({ navigation }) {
 
 function Profile({ navigation }) {
 
+	const toSettings = () => {
+		navigation.navigate('Settings');
+	}
+
+	const toResetPass = () => {
+		navigation.navigate('ResetPassword');
+	}
+
+	const toAccountInfo = () => {
+		navigation.navigate('AccountInformation');
+	}
+
 	return (
 		<SafeAreaView>
-			<Text> Profile Screen</Text>
+			<TouchableOpacity onPress={toAccountInfo}>
+				<View style = {stylesheet.styleWrapButton}>
+					<View style = {stylesheet.styleButton}>
+						<Text style = {stylesheet.styleText}>
+							{`Account Information`}
+						</Text>
+					</View>
+				</View>	
+			</TouchableOpacity>
+
+			<TouchableOpacity onPress={toResetPass}>
+				<View style = {stylesheet.styleWrapButtonCopy1}>
+					<View style = {stylesheet.styleButtonCopy1}>
+						<Text style = {stylesheet.styleTextCopy1}>
+							{`Reset Password`}
+						</Text>
+					</View>
+				</View>	
+			</TouchableOpacity>
+
+			<TouchableOpacity onPress={toSettings}>
+				<View style = {stylesheet.styleWrapButtonCopy2}>
+					<View style = {stylesheet.styleButtonCopy2}>
+						<Text style = {stylesheet.styleText}>
+							{`Settings`}
+						</Text>
+					</View>
+				</View>	
+			</TouchableOpacity>
 		</SafeAreaView>
 	
+	
+		
+	)
+}
+
+function Settings({ navigation }) {
+
+	const backToProfile = () => {
+		navigation.navigate('Profile');
+	}
+
+	return (
+		<SafeAreaView>
+			<TextInput style={stylesheet.styleInput}
+			placeholder="TestSettings"
+		/>
+
+		<Button title='Done'
+		onPress={backToProfile}
+		/>
+	</SafeAreaView>
+
+
+	)
+
+
+
+}
+
+function ResetPassword({ navigation }) {
+
+	const backToProfile = () => {
+		navigation.navigate('Profile');
+	}
+
+	return (
+		<SafeAreaView>
+			<TextInput style={stylesheet.styleInput}
+			placeholder="TestPassword"
+			/>
+
+		<Button title='Done'
+		onPress={backToProfile}
+		/>
+	</SafeAreaView>
+
+	)
+
+
+
+}
+
+function AccountInformation({ navigation }) {
+
+	const backToProfile = () => {
+		navigation.navigate('Profile');
+	}
+
+	return (
+		<SafeAreaView>
+			<TextInput style={stylesheet.styleInput}
+			placeholder="TestAccount"
+			/>
+
+			<Button title='Done'
+			onPress={backToProfile}
+			/>
+		</SafeAreaView>
 		
 	)
 }
@@ -150,6 +272,18 @@ function App() {
 		  name="Profile"
 		  component={Profile}
 		/>
+		<Stack.Screen
+		  name='Settings'
+		  component={Settings}
+		/>
+		<Stack.Screen
+		  name='ResetPassword'
+		  component={ResetPassword}
+		/>
+		<Stack.Screen
+		 name="AccountInformation"
+		 component={AccountInformation}
+		/>
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -160,7 +294,7 @@ const stylesheet = StyleSheet.create({
 	   position: "absolute",
 	   alignContent: "center",
 	   right: 30,
-	   top: 30,
+	   top: 0,
 	   borderRadius: 0,
 	   width: 400,
 	   height: 200,
@@ -169,7 +303,7 @@ const stylesheet = StyleSheet.create({
 	   position: "absolute",
 	   alignContent: "center",
 	   left: 60,
-	   top: 650,
+	   top: 550,
 	   borderRadius: 0,
 	   width: 284,
 	   height: 142,
@@ -177,7 +311,7 @@ const stylesheet = StyleSheet.create({
    styleImage3: {
 	   position: "absolute",
 	   alignContent: "center",
-	   top: 420,
+	   top: 460,
 	   left: 18,
    },
    styleText: {
@@ -262,6 +396,33 @@ const stylesheet = StyleSheet.create({
 	   paddingBottom: 12,
 	   paddingLeft: 16,
    },
+   styleButtonCopy2: {
+	width: "100%",
+	height: "auto",
+	display: "flex",
+	flexDirection: "row",
+	justifyContent: "center",
+	alignItems: "center",
+	padding: 12,
+	borderRadius: 10,
+	backgroundColor: "red",
+},
+styleWrapButtonCopy2: {
+	position: "absolute",
+	left: 0.3571428571428896,
+	right: -0.3571428571428896,
+	top: 254.4285714285712,
+	width: "auto",
+	height: "auto",
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "center",
+	alignItems: "center",
+	paddingTop: 12,
+	paddingRight: 16,
+	paddingBottom: 12,
+	paddingLeft: 16,
+},
    styleFindNearYou: {
 	   position: "absolute",
 	   left: 16,
@@ -291,7 +452,57 @@ const stylesheet = StyleSheet.create({
 	   padding: 16,
 	   backgroundColor: "rgba(255, 255, 255, 1)",
    },
+   styleActivityButton: {
+	position: "absolute",
+	top: 750,
+	left: 0,
 
+
+   },
+   styleMessagesButton: {
+	position: "absolute",
+	top: 750,
+	left: 150,
+
+   },
+   styleProfileButton: {
+	position: "absolute",
+	alignContent: "center",
+	top: 750,
+	right: 0,
+
+   },
+
+   styleActivityButton2: {
+	width: "70%",
+	height: "auto",
+	display: "flex",
+	flexDirection: "row",
+	justifyContent: "center",
+	alignItems: "center",
+	padding: 12,
+	borderRadius: 10,
+	backgroundColor: "red",
+},
+styleWrapActivityButton: {
+	position: "absolute",
+	left: 0,
+	top: 750,
+	width: "auto",
+	height: "auto",
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "center",
+	alignItems: "center",
+
+},
+
+styleInput: {
+	height: 40,
+	margin: 12,
+	borderWidth: 1,
+	padding: 10
+},
 
 })
 
