@@ -16,8 +16,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { MaterialCommuityIcons } from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Icon } from 'react-native-vector-icons/FontAwesome';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
 const Stack = createStackNavigator();
@@ -30,7 +29,7 @@ function Launch({ navigation }) {
 
   return (
 	<SafeAreaView>
-
+		
 		<Button
 			title='Home'
 			onPress = {onPressHandler}
@@ -83,25 +82,31 @@ function Home({ navigation }) {
 		<SafeAreaView>
 				<Image style = {stylesheet.styleImage1} source = {require("./images/FoxLift-1.png")} />
 		</SafeAreaView>
-				<View style = {stylesheet.styleActivityButton}>
-					<Button
-					title="Activity"
-					onPress={onPressHandlerActivity}
-					/>
-				</View>	
+		<TouchableOpacity onPress = {onPressHandlerProfile}>
+			<View style = {stylesheet.styleProfileIcon}>
+				<MaterialCommunityIcons name="account" size={48} color="red" />
+			</View>
+		</TouchableOpacity>
+		
+		<TouchableOpacity onPress = {onPressHandlerActivity}>
+			<View style = {stylesheet.styleActivityIcon}>
+				<MaterialCommunityIcons name="file-document" size={48} color="red" />
+			</View>
+		</TouchableOpacity>
 
-				<View style= {stylesheet.styleMessagesButton}>
-					<Button
-					title="Messages"
-					onPress={onPressHandlerMessages}
-					/>
-				</View>
-				<View style= {stylesheet.styleProfileButton}>
-					<Button
-					title="Profile"
-					onPress={onPressHandlerProfile}
-					/>
-				</View>		
+		<TouchableOpacity onPress = {onPressHandlerMessages}>
+			<View style = {stylesheet.styleMessagesIcon}>
+				<MaterialCommunityIcons name="android-messages" size={48} color="red" />
+			</View>
+		</TouchableOpacity>
+		
+
+
+			<View style = {stylesheet.styleHomeIcon}>
+				<MaterialCommunityIcons name="home" size={48} color="red" />
+			</View>
+
+
 		</SafeAreaView>
 	)
 }
@@ -423,20 +428,11 @@ styleWrapButtonCopy2: {
 	paddingBottom: 12,
 	paddingLeft: 16,
 },
-   styleFindNearYou: {
+   styleIcon: {
 	   position: "absolute",
 	   left: 16,
 	   top: 16,
-	   width: 345,
-	   color: "rgba(255, 69, 69, 1)",
-	   fontSize: 48,
-	   fontFamily: "Arial",
-	   letterSpacing: -0.09000000357627869,
-	   fontStyle: "normal",
-	   fontWeight: "700",
 	   textAlign: "center",
-	   height: "auto",
-	   lineHeight: 48,
    },
    stylePreset: {
 	   position: "absolute",
@@ -451,26 +447,6 @@ styleWrapButtonCopy2: {
 	   alignItems: "center",
 	   padding: 16,
 	   backgroundColor: "rgba(255, 255, 255, 1)",
-   },
-   styleActivityButton: {
-	position: "absolute",
-	top: 750,
-	left: 0,
-
-
-   },
-   styleMessagesButton: {
-	position: "absolute",
-	top: 750,
-	left: 150,
-
-   },
-   styleProfileButton: {
-	position: "absolute",
-	alignContent: "center",
-	top: 750,
-	right: 0,
-
    },
 
    styleActivityButton2: {
@@ -503,6 +479,35 @@ styleInput: {
 	borderWidth: 1,
 	padding: 10
 },
+
+styleProfileIcon: {
+	position: "absolute",
+	top: 750,
+	right: 0,
+
+},
+
+styleActivityIcon: {
+	position: "absolute",
+	top: 750,
+	left: 50,
+
+},
+
+styleHomeIcon: {
+	position: "absolute",
+	top: 750,
+	left: 0,
+
+},
+
+styleMessagesIcon: {
+	position: "absolute",
+	top: 750,
+	right: 50,
+
+},
+
 
 })
 
