@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -8,9 +8,8 @@ import {
   TouchableOpacity,
   TextInput,
   SafeAreaView,
+  Switch,
 } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
@@ -118,12 +117,40 @@ export function AccountInformation({ navigation }) {
 		navigation.navigate('Profile');
 	}
 
+	//https://reactnative.dev/docs/handling-text-input
+	const [isEnabled, setIsEnabled] = useState(false);
+	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
 	return (
 		<SafeAreaView>
+			<Text>First Name:</Text>
 			<TextInput style={stylesheet.styleInput}
-			placeholder="TestAccount"
+			placeholder="Fname"
 			/>
 
+			<Text>Last Name:</Text>
+			<TextInput style={stylesheet.styleInput}
+			placeholder="Lname"
+			/>
+
+			<Text>Email:</Text>
+			<TextInput style={stylesheet.styleInput}
+			placeholder="Email"
+			/>
+
+			<Text>Account Name:</Text>
+			<TextInput style={stylesheet.styleInput}
+			placeholder="Acct name"
+			/>
+
+			<Text>Do you have a car?</Text>
+			<Switch
+        	trackColor={{ false: "#767577", true: "#81b0ff" }}
+        	thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+        	ios_backgroundColor="#3e3e3e"
+        	onValueChange={toggleSwitch}
+        	value={isEnabled}
+      	/>
 			<Button title='Done'
 			onPress={backToProfile}
 			/>
@@ -242,6 +269,21 @@ styleWrapButtonCopy2: {
 	paddingBottom: 12,
 	paddingLeft: 16,
 },
+
+styleInput: {
+	height: 40,
+	margin: 12,
+	borderWidth: 1,
+	padding: 10
+},
+
+styleInput2: {
+	height: 40,
+	margin: 12,
+	borderWidth: 1,
+	padding: 10
+},
+
 
 styleProfileIcon: {
 	position: "absolute",
