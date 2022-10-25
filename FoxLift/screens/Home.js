@@ -1,58 +1,79 @@
-import React from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   StyleSheet,
   View,
   Image,
   TouchableOpacity,
   SafeAreaView,
+  Dimensions
 } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import * as Location from 'expo-location';
+
+import { mapStyle } from '../globals/MapStyle';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 
 function Home({ navigation }) {
 
-    const onPressHandlerActivity = () => {
-      navigation.navigate('Activity');
-    }
-    const onPressHandlerMessages = () => {
-      navigation.navigate('Messages');
-    }
-    const onPressHandlerProfile = () => {
-      navigation.navigate('Profile');
-    }
+  const [latlng,setLatLng] = useState({})
+
+  const checkPermission =async()=>{
+      const hasPermission = await Location.requestForegroundPermissionsAsync();
+      if(hasPermission.status === 'granted') {
+          const permission = await askPermission();
+          return permission
+      }
+      return true
+  };
   
+  
+  const askPermission = async()=>{
+      const permission = await Location.requestForegroundPermissionsAsync()
+      return permission.status === 'granted';
+  };
+  
+  
+  const getLocation = async()=>{
+      try{
+          const {granted} =await Location.requestForegroundPermissionsAsync();
+          if(!granted)return;
+          const {
+              coords:{latitude,longitude},
+          } = await Location.getCurrentPositionAsync();
+          setLatLng({latitude:latitude,longitude:longitude})
+      }catch(err){
+  
+      }
+  }
+
+const mapRef = useRef(1)
+
+useEffect(()=>{
+  checkPermission();
+  getLocation()
+,[]})
   
     return (
       <SafeAreaView>
-          <SafeAreaView>
-                  <Image style = {stylesheet.styleImage1} source = {require("../images/FoxLift-1.png")} />
-          </SafeAreaView>
-          <TouchableOpacity onPress = {onPressHandlerProfile}>
-              <View style = {stylesheet.styleProfileIcon}>
-                  <MaterialCommunityIcons name="account" size={48} color="red" />
-              </View>
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress = {onPressHandlerActivity}>
-              <View style = {stylesheet.styleActivityIcon}>
-                  <MaterialCommunityIcons name="file-document" size={48} color="red" />
-              </View>
-          </TouchableOpacity>
+        <View style = {{alignItems: "center", justifyContent: "center"}}>
+          <MapView
+            ref = {mapRef}
+            provider = {PROVIDER_GOOGLE}
+            style = {stylesheet.map}
+            customMapStyle = {mapStyle}
+            showsUserLocation = {true}
+            followsUserLocation = {true}
+            rotateEnabled = {true}
+            zoomEnabled = {true}
+            toolbarEnabled = {true}
+            >
+
+          </MapView>
+        </View>
   
-          <TouchableOpacity onPress = {onPressHandlerMessages}>
-              <View style = {stylesheet.styleMessagesIcon}>
-                  <MaterialCommunityIcons name="android-messages" size={48} color="red" />
-              </View>
-          </TouchableOpacity>
-          
-  
-          
-              <View style = {stylesheet.styleHomeIcon}>
-                  <MaterialCommunityIcons name="home" size={48} color="red" />
-              </View>
-  
-  
-          </SafeAreaView>
+      </SafeAreaView>
       )
   }
   
@@ -65,35 +86,14 @@ function Home({ navigation }) {
 	   borderRadius: 0,
 	   width: 400,
 	   height: 200,
-   },
+  },
  
-styleProfileIcon: {
-	position: "absolute",
-	top: 750,
-	right: 0,
 
-},
-
-styleActivityIcon: {
-	position: "absolute",
-	top: 750,
-	left: 50,
-
-},
-
-styleHomeIcon: {
-	position: "absolute",
-	top: 750,
-	left: 0,
-
-},
-
-styleMessagesIcon: {
-	position: "absolute",
-	top: 750,
-	right: 50,
-
-},
+  map:{
+    height: 250,
+    marginVertical: 0,
+    width:SCREEN_WIDTH*0.92
+  },
 
 
 })
