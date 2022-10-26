@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS foxlift;
 USE foxlift;
 
 DROP USER IF EXISTS 'foxliftapp'@'localhost';
-CREATE USER 'foxliftapp'@'localhost' IDENTIFIED BY 'securepw';
+CREATE USER 'foxliftapp'@'localhost' IDENTIFIED BY 'FoxLiftApp2022!';
 GRANT INSERT, UPDATE, DELETE ON foxlift.* TO 'foxliftapp'@'localhost';
 
 -- MySQL dump 10.13  Distrib 8.0.25, for Win64 (x86_64)
