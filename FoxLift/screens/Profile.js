@@ -11,6 +11,7 @@ import {
   Switch,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { NavigationActions } from 'react-navigation';
 
 
 function Profile({ navigation }) {
@@ -21,7 +22,7 @@ function Profile({ navigation }) {
 
 
 	const toAccountInfo = () => {
-		navigation.navigate('AccountInformation');
+		navigation.navigate('Account Information');
 	}
 
 	const onPressHandlerActivity = () => {
@@ -92,11 +93,40 @@ export function Settings({ navigation }) {
 		navigation.navigate('Profile');
 	}
 
+	const toLaunch = () => {
+		navigation.navigate('Launch');
+	}
+
+	const toTermsConditions = () => {
+		navigation.navigate('Terms and Conditions');
+	}
+
 	return (
+		// <SafeAreaView>
+		// 	<TextInput style={stylesheet.styleInput}
+		// 	placeholder="TestSettings"
+		// />
 		<SafeAreaView>
-			<TextInput style={stylesheet.styleInput}
-			placeholder="TestSettings"
-		/>
+		<TouchableOpacity onPress={toTermsConditions}>
+				<View style = {stylesheet.styleWrapButtonCopy2}>
+					<View style = {stylesheet.styleButtonCopy2}>
+						<Text style = {stylesheet.styleText}>
+							{`Terms and Conditions`}
+						</Text>
+					</View>
+				</View>	
+		</TouchableOpacity>
+
+		<TouchableOpacity onPress={toLaunch}>
+				<View style = {stylesheet.styleWrapButton}>
+					<View style = {stylesheet.styleButton}>
+						<Text style = {stylesheet.styleText}>
+							{`Logout`}
+						</Text>
+					</View>
+				</View>	
+		</TouchableOpacity>
+
 
 		<Button title='Done'
 		onPress={backToProfile}
@@ -125,22 +155,22 @@ export function AccountInformation({ navigation }) {
 		<SafeAreaView>
 			<Text>First Name:</Text>
 			<TextInput style={stylesheet.styleInput}
-			placeholder="Fname"
+			placeholder="First Name"
 			/>
 
 			<Text>Last Name:</Text>
 			<TextInput style={stylesheet.styleInput}
-			placeholder="Lname"
+			placeholder="Last Name"
 			/>
 
 			<Text>Email:</Text>
 			<TextInput style={stylesheet.styleInput}
-			placeholder="Email"
+			placeholder="Email Address"
 			/>
 
 			<Text>Account Name:</Text>
 			<TextInput style={stylesheet.styleInput}
-			placeholder="Acct name"
+			placeholder="Account Name"
 			/>
 
 			<Text>Do you have a car?</Text>
@@ -158,6 +188,24 @@ export function AccountInformation({ navigation }) {
 		
 	)
 }
+
+export function TermsConditions({ navigation }) {
+	const backToSettings = () => {
+		navigation.navigate('Settings');
+	}
+
+	return (
+		<SafeAreaView>
+			<Text>WE ARE NOT RESPONSIBLE FOR THINGS THAT CAN GO WRONG DURING A RIDE SHARE!</Text>
+			
+			<Button title='Done'
+			onPress={backToSettings}
+			/>
+		</SafeAreaView>
+		
+	)
+}
+
 
 
 const stylesheet = StyleSheet.create({

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import reactDom from 'react-dom';
 import {
   StyleSheet,
   View,
@@ -8,48 +9,65 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import * as Google from "expo-auth-session/providers/google";
+import * as WebBrowser from "expo-web-browser";
 
-
+WebBrowser.maybeCompleteAuthSession();
 
 function Launch({ navigation }) {
+
+	const [accessToken, setAccessToken] = React.useState();
+  	const [userInfo, setUserInfo] = React.useState();
+  	const [message, setMessage] = React.useState();
+
+	const [request, response, promptAsync] = Google.useAuthRequest({
+		//androidClientId: "",
+		iosClientId: "",
+		//expoClientId: ""
+	});
+
+	React.useEffect(() => {
+		setMessage(JSON.stringify(response));
+		if (response?.type === "success") {
+		  setAccessToken(response.authentication.accessToken);
+		}
+	  }, [response]);
+	
+	  async function getUserData() {
+		let userInfoResponse = await fetch("", {
+		  headers: { Authorization: `Bearer ${accessToken}`}
+		});
+	
+		userInfoResponse.json().then(data => {
+		  setUserInfo(data);
+		});
+	  }
+
+	  function showUserInfo() {
+		if (userInfo) {
+		  return (
+			<View style={styles.userInfo}>
+			  <Image source={{uri: userInfo.picture}} style={styles.profilePic} />
+			  <Text>Welcome {userInfo.name}</Text>
+			  <Text>{userInfo.email}</Text>
+			</View>
+		  );
+		}
+	  }
 
     const onPressHandler = () => {
       navigation.navigate('Home');
     }
-  
+
     return (
       <SafeAreaView>
-          
-          <Button
-              title='Home'
-              onPress = {onPressHandler}
-          />
-          <SafeAreaView>
-                  <Image style = {stylesheet.styleImage1} source = {require("../images/FoxLift-1.png")} />
-                  <Image style = {stylesheet.styleImage3} source = {require("../images/googleButton.png")} />
-                  <Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
-          </SafeAreaView>
-          <TouchableOpacity onPress={onPressHandler}>
-          <View style = {stylesheet.styleWrapButton}>
-                      <View style = {stylesheet.styleButton}>
-                          <Text style = {stylesheet.styleText}>
-                              {`Login`}
-                          </Text>
-                      </View>
-                  </View>	
-          </TouchableOpacity>
-          
-          <TouchableOpacity onPress={onPressHandler}>
-                              <View style = {stylesheet.styleWrapButtonCopy1}>
-                      <View style = {stylesheet.styleButtonCopy1}>
-                          <Text style = {stylesheet.styleTextCopy1}>
-                              {`Register`}
-                          </Text>
-                      </View>
-                  </View>
-          </TouchableOpacity>
-      
-          </SafeAreaView>
+                <Image style = {stylesheet.styleImage1} source = {require("../images/FoxLift-1.png")} />
+				<TouchableOpacity onPress={accessToken ? getUserData : () => { promptAsync({useProxy: false, showInRecents: true}) }}>
+					  <Image style = {stylesheet.styleImage3} source = {require("../images/signin-button.png")} />
+			  	</TouchableOpacity>
+                <Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
+		</SafeAreaView>
       )
   
   }
@@ -77,8 +95,14 @@ function Launch({ navigation }) {
    styleImage3: {
 	   position: "absolute",
 	   alignContent: "center",
-	   top: 460,
-	   left: 18,
+	   top: 330,
+	   left: 45,
+	   borderWidth: 3,
+	   borderTopLeftRadius: 15,
+	   borderTopRightRadius: 15,
+	   borderBottomLeftRadius: 15,
+	   borderBottomRightRadius: 15,
+	   borderColor: "red",
    },
    styleText: {
 	   flexBasis: 0,

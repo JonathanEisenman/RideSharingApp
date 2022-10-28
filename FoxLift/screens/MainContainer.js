@@ -7,10 +7,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Launch from "./Launch";
 import Home from "./Home";
-import Activity from "./Activity";
+import Activity, { PastRides, UpcomingRides } from "./Activity";
 import Messages from "./Messages";
 import Chat from "./Chat";
-import Profile, {AccountInformation, Settings} from "./Profile";
+import Profile, {AccountInformation, Settings, TermsConditions} from "./Profile";
 
 
 //Screen names
@@ -64,14 +64,25 @@ export default function MainContainer(){
                 name="Settings"
                 component={Settings}
                 />
-                <Stack.Screen
-                name="AccountInformation"
+            <Stack.Screen
+                name="Account Information"
                 component={AccountInformation}
                 />
-                <Stack.Screen
+            <Stack.Screen 
+                name = "Terms and Conditions"
+                component = {TermsConditions}
+                />
+            <Stack.Screen
                 name="Chat"
                 component={Chat}
-
+                />
+            <Stack.Screen
+                name="Upcoming Rides"
+                component={UpcomingRides}
+                />
+            <Stack.Screen
+                name="Past Rides"
+                component={PastRides}
                 />
 
 
@@ -79,6 +90,8 @@ export default function MainContainer(){
                 <Tab.Screen name={activityName} component={Activity} />
                 <Tab.Screen name={messagesName} component={Messages} />
                 <Tab.Screen name={profileName} component={Profile} />
+                <Tab.Screen name={launchName} component={Launch} />
+                
 
                 
             </Tab.Navigator>
