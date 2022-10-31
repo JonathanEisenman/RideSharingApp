@@ -57,28 +57,6 @@ function Profile({ navigation }) {
 				</View>	
 			</TouchableOpacity>
 
-			<TouchableOpacity onPress = {onPressHandlerHome}>
-			<View style = {stylesheet.styleHomeIcon}>
-				<MaterialCommunityIcons name="home" size={48} color="red" />
-			</View>
-		</TouchableOpacity>
-		
-		<TouchableOpacity onPress = {onPressHandlerActivity}>
-			<View style = {stylesheet.styleActivityIcon}>
-				<MaterialCommunityIcons name="file-document" size={48} color="red" />
-			</View>
-		</TouchableOpacity>
-
-		<TouchableOpacity onPress = {onPressHandlerMessages}>
-			<View style = {stylesheet.styleMessagesIcon}>
-				<MaterialCommunityIcons name="android-messages" size={48} color="red" />
-			</View>
-		</TouchableOpacity>
-
-		<View style = {stylesheet.styleProfileIcon}>
-				<MaterialCommunityIcons name="account" size={48} color="red" />
-		</View>
-
 
 		</SafeAreaView>
 	

@@ -15,6 +15,8 @@ import * as WebBrowser from "expo-web-browser";
 
 WebBrowser.maybeCompleteAuthSession();
 
+//https://docs.expo.dev/guides/authentication/#google
+
 function Launch({ navigation }) {
 
 	const [accessToken, setAccessToken] = React.useState();
@@ -23,8 +25,8 @@ function Launch({ navigation }) {
 
 	const [request, response, promptAsync] = Google.useAuthRequest({
 		//androidClientId: "",
-		iosClientId: "",
-		//expoClientId: ""
+		iosClientId: "136934915450-20roe1ao7nc18jhu9mk0p6oln3si3n5c.apps.googleusercontent.com",
+		expoClientId: "136934915450-4mf17sotm04kp7lflij1ldlnk0im269o.apps.googleusercontent.com"
 	});
 
 	React.useEffect(() => {

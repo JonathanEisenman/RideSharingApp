@@ -21,12 +21,42 @@ const messagesName = 'Messages';
 const profileName = 'Profile';
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
+const ProfileStack = createStackNavigator();
+const ActivityStack = createStackNavigator();
+const MessagesStack = createStackNavigator();
+
+const ProfileStackScreen = () => (
+        <ProfileStack.Navigator>
+            <ProfileStack.Screen name = "Profile" component = {Profile} />
+            <ProfileStack.Screen name = "Settings" component = {Settings} />
+            <ProfileStack.Screen name = "Account Information" component = {AccountInformation} />
+            <ProfileStack.Screen name = "Terms and Conditions" component = {TermsConditions} />
+        </ProfileStack.Navigator>
+)
+
+const ActivityStackScreen = () => (
+        <ActivityStack.Navigator>
+            <ActivityStack.Screen name = "Activity" component = {Activity} />
+            <ActivityStack.Screen name = "Upcoming Rides" component = {UpcomingRides} />
+            <ActivityStack.Screen name = "Past Rides" component = {PastRides} />
+        </ActivityStack.Navigator>
+)
+
+const MessagesStackScreen = ({navigation}) => {
+    <MessagesStack.Navigator>
+        <MessagesStack.Screen name = "Messages" component = {Messages} />
+        <MessagesStack.Screen name = "Chat" component = {Chat} 
+        options={({route}) => ({
+        title: route.params.userName,
+        })}/>
+    </MessagesStack.Navigator>
+}
 
 export default function MainContainer(){
     
     
     return (
+        
         <NavigationContainer>
             <Tab.Navigator
             initialRouteName={homeName}
@@ -51,45 +81,24 @@ export default function MainContainer(){
                     return <MaterialCommunityIcons name={iconName} size={size} color={color} />
                 },
             })}
-            
             tabBarOptions={{
                 activeTintColor: 'red',
                 inactiveTintColor: 'grey',
                 labelStyle: {paddingBottom: 10, fontSize: 10},
-                
+
             }}
 
             >
-            <Stack.Screen
-                name="Settings"
-                component={Settings}
-                />
-            <Stack.Screen
-                name="Account Information"
-                component={AccountInformation}
-                />
-            <Stack.Screen 
-                name = "Terms and Conditions"
-                component = {TermsConditions}
-                />
-            <Stack.Screen
-                name="Chat"
-                component={Chat}
-                />
-            <Stack.Screen
-                name="Upcoming Rides"
-                component={UpcomingRides}
-                />
-            <Stack.Screen
-                name="Past Rides"
-                component={PastRides}
-                />
+
+
+
 
 
                 <Tab.Screen name={homeName} component={Home} />
-                <Tab.Screen name={activityName} component={Activity} />
+                <Tab.Screen name={activityName} component={ActivityStackScreen} />
                 <Tab.Screen name={messagesName} component={Messages} />
-                <Tab.Screen name={profileName} component={Profile} />
+                <Tab.Screen name={profileName} component={ProfileStackScreen} />
+                <Tab.Screen name="Chat" component={Chat} />
                 <Tab.Screen name={launchName} component={Launch} />
                 
 

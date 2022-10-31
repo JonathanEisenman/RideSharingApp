@@ -21,9 +21,9 @@ function App() {
   return (
 
 
-    
-    <MainContainer></MainContainer>
-    
+
+  <MainContainer></MainContainer>
+
   )
 }
 

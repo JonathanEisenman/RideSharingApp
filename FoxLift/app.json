@@ -34,8 +34,7 @@
     "config": {
       "googleMaps": {
         "apiKey": "AIzaSyDfTk6hnY9ikbuve1dEua2-8F3y5s4tikk"
-      },
-      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "FOREGROUND_SERVICE"]
+      }
     }
 
     },
