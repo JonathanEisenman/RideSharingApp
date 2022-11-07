@@ -16,6 +16,8 @@ import * as WebBrowser from "expo-web-browser";
 WebBrowser.maybeCompleteAuthSession();
 
 //https://docs.expo.dev/guides/authentication/#google
+//https://docs.expo.dev/versions/latest/sdk/auth-session/
+//https://developers.google.com/identity/sign-in/web/server-side-flow
 
 function Launch({ navigation }) {
 
