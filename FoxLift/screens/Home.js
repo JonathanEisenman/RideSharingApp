@@ -163,6 +163,8 @@ useEffect(()=>{
                 origin={origin}
                 destination={destination}
                 apikey={GOOGLE_MAPS_API_KEY}
+                strokeWidth = {2}
+                strokeColor = "hotpink"
               />}
 
             </MapView>

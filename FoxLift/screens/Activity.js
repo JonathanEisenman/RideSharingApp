@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,6 +9,8 @@ import {
   TextInput,
   SafeAreaView,
   Switch,
+  FlatList,
+  ActivityIndicator
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -50,16 +52,45 @@ function Activity({ navigation }) {
 
 export function UpcomingRides({ navigation }) {
 
+	const [isLoading, setLoading] = useState(true);
+  	const [data, setData] = useState([]);
+
 	const backToActivity = () => {
 		navigation.navigate('Activity');
 	}
 
+	  const getTrips = async () => {
+		try {
+		 const response = await fetch('http://10.10.9.188:3000/gettrips');
+		 const json = await response.json();
+		 setData(json);
+	   } catch (error) {
+		 console.error(error);
+	   } finally {
+		 setLoading(false);
+	   }
+	 }
+   
+	 useEffect(() => {
+	   getTrips();
+	 }, []);
+
 	return (
-		<SafeAreaView>
+		<View style={{ flex: 1, padding: 24 }}>
 			<Button title='Done'
 		onPress={backToActivity}
 		/>
-		</SafeAreaView>
+		<Text></Text>
+		{isLoading ? <ActivityIndicator/> : (
+		<FlatList
+          data={data}
+          keyExtractor={({ tID }, index) => tID}
+          renderItem={({ item }) => (
+            <Text>{item.startLocation + ' ' + item.destination + ' ' + item.time + ' '+ item.type + "\n"}</Text>
+          )}
+        />
+		)}
+		</View>
 	)
 }
 
