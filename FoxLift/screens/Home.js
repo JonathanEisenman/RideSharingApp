@@ -59,6 +59,7 @@ function InputAutoComplete({
         query={{
         key: GOOGLE_MAPS_API_KEY, 
         language: 'en',
+        components: "country:us"
         }}
       />
 
@@ -96,8 +97,10 @@ function Home({ navigation }) {
     flag: "origin" | "destination") => {
       const set = flag === "origin" ? setOrigin : setDestination
       const position = {
-        latitude: parseFloat(details?.geometry.location.lat),
-        longitutde: parseFloat(details?.geometry.location.lng),
+        latitude: details.geometry.location.lat,
+        longitude: details.geometry.location.lng
+        //latitude: parseFloat(details?.geometry.location.lat),
+        //longitutde: parseFloat(details?.geometry.location.lng),
       }
       set(position);
       moveTo(position);
@@ -158,7 +161,7 @@ useEffect(()=>{
             >
               {origin && <Marker coordinate={origin} />}
               {destination && <Marker coordinate={destination} />}
-
+              
               {origin && destination && <MapViewDirections
                 origin={origin}
                 destination={destination}
