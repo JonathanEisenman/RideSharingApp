@@ -24,8 +24,8 @@ GET Endpoints:
 
     # Other GET Endpoints
 	/gettripsrange
-	    # Takes parameters "min" and "max"
-	    # Example: SELECT * FROM trips WHERE time >= MIN_TIMESTAMP AND time <= MAX_TIMESTAMP 
+	    # Takes parameters "min" and "max", only shows non-cancelled and non-completed trips
+	    # Example: SELECT * FROM trips WHERE time >= MIN_TIMESTAMP AND time <= MAX_TIMESTAMP AND isCompleted=0 AND isCancelled=0 ORDER BY time ASC
 	    # http://10.10.9.188:3000/gettripsrange?min=MIN_TIMESTAMP&max=MAX_TIMESTAMP
 
 POST ENDPOINTs:
