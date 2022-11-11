@@ -80,13 +80,20 @@ export default function MainContainer(){
 
                     return <MaterialCommunityIcons name={iconName} size={size} color={color} />
                 },
+                tabBarActiveTintColor: "red",
+                tabBarInactiveTintColor: "grey",
+                tabBarLabelStyle: {
+                  paddingBottom: 10,
+                  fontSize: 10
+                },
+                tabBarStyle: [
+                  {
+                    display: "flex"
+                  },
+                  null
+                ]
             })}
-            tabBarOptions={{
-                activeTintColor: 'red',
-                inactiveTintColor: 'grey',
-                labelStyle: {paddingBottom: 10, fontSize: 10},
 
-            }}
 
             >
 

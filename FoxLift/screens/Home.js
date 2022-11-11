@@ -84,13 +84,16 @@ function Home({ navigation }) {
   //These functions are called when the user selects the google autocomplete place
   const [origin, setOrigin] = useState({});
   const [destination, setDestination] = useState({});
+  const [showDirections, setShowDirections] = useState(false);
+  const [distance, setDistance] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   const moveTo = async (position: LatLng) => {
-    const camera = await mapRef.current.getCamera()
+    const camera = await mapRef?.current.getCamera()
     if (camera) {
       camera.center = position;
       camera.zoom = 15;
-      mapRef.current.animateCamera(camera, {duration: 1000});
+      mapRef?.current.animateCamera(camera, {duration: 1000});
     }
   };
 
@@ -102,12 +105,40 @@ function Home({ navigation }) {
       const position = {
         latitude: details.geometry.location.lat,
         longitude: details.geometry.location.lng
-        //latitude: parseFloat(details?.geometry.location.lat),
-        //longitutde: parseFloat(details?.geometry.location.lng),
       }
       set(position);
       moveTo(position);
     };
+
+    const edgePaddingValue = 10;
+
+    const edgePadding = {
+      top: edgePaddingValue,
+      bottom: edgePaddingValue,
+      left: edgePaddingValue,
+      right: edgePaddingValue,
+    }
+
+    const traceRoute = () => {
+      if (origin && destination) {
+        setShowDirections(true)
+        mapRef.current.fitToCoordinates([origin, destination], {edgePadding})
+      }
+    }
+
+    const traceRouteOnReady = (args: any) => {
+      if (args) {
+        setDistance(args.distance);
+        setDuration(args.duration);
+      }
+    }
+
+
+    const createRideShare = () => {
+
+
+    }
+    
 
   const checkPermission =async()=>{
       const hasPermission = await Location.requestForegroundPermissionsAsync();
@@ -164,12 +195,13 @@ useEffect(()=>{
               {origin && <Marker coordinate={origin} />}
               {destination && <Marker coordinate={destination} />}
               
-              {origin && destination && <MapViewDirections
+              {showDirections && origin && destination && <MapViewDirections
                 origin={origin}
                 destination={destination}
                 apikey={GOOGLE_MAPS_API_KEY}
                 strokeWidth = {2}
                 strokeColor = "hotpink"
+                onReady = {traceRouteOnReady}
               />}
 
             </MapView>
@@ -181,7 +213,25 @@ useEffect(()=>{
               <InputAutoComplete label = "Destination" onPlaceSelected = {(details) => {
                 onPlaceSelected(details, "destination")
               }}/>
+
+              <TouchableOpacity style = {stylesheet.button} onPress = {traceRoute}> 
+                <Text style = {stylesheet.buttonText}> Trace Route</Text>
+              </TouchableOpacity>
+
+              {distance && duration ? (
+              <View> 
+                <Text> Distance: {distance.toFixed(2)} miles </Text>
+                <Text> Duration: {Math.ceil(duration)} min </Text>
+              </View>
+              ): null}
+
+            <TouchableOpacity style = {stylesheet.button} onPress = {() => {createRideShare}}>
+                <Text style = {stylesheet.buttonText}> Confirm Ride</Text>
+            </TouchableOpacity>
+
             </View>
+
+
 
         </View>
 
@@ -224,6 +274,17 @@ useEffect(()=>{
     borderColor: "black",
     borderWidth: 1,
   },
+
+  button: {
+    backgroundColor: "gray",
+    paddingVertical: 12,
+    marginTop: 16,
+    borderRadius: 4,
+  },
+
+  buttonText: {
+    textAlign: "center",
+  }
 
 
 })
