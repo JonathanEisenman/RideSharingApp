@@ -1,0 +1,58 @@
+
+GET Endpoints:
+    # All these endpoints can be sent parameters that are column names
+
+	# These endpoints use 'AND' between parameters
+	# Example: SELECT * FROM users WHERE uid="1" AND fName="Anthony"
+	# http://10.10.9.188:3000/getusers?uid=1&fName=Anthony
+	/getusers
+	/gettrips
+	/gettake
+	/getrate
+	/getreport
+	/getmessage
+	
+	# These endpoints use 'OR' between parameters
+	# Example: SELECT * FROM trips WHERE isCompleted=1 OR isCancelled=1
+	# http:10.10.9.188:3000/gettripsor?isCompleted=1&isCancelled=1
+	/getusersor
+	/gettripsor
+	/gettakeor
+	/getrateor
+	/getreportor
+	/getmessageor
+
+    # Other GET Endpoints
+	/gettripsrange
+	    # Takes parameters "min" and "max"
+	    # Example: SELECT * FROM trips WHERE time >= MIN_TIMESTAMP AND time <= MAX_TIMESTAMP 
+	    # http://10.10.9.188:3000/gettripsrange?min=MIN_TIMESTAMP&max=MAX_TIMESTAMP
+
+POST ENDPOINTs:
+    # STILL IN DEVELOPMENT
+	/postusers
+		JAVASCRIPT FETCH IMPLEMENTATION
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+
+		var raw = JSON.stringify({
+		  "fName": "fName2",
+		  "lName": "lName2",
+		  "uID": "2",
+		  "accountName": "accountName2",
+		  "isDriver": "0",
+		  "email": "email2@gmail.com",
+		  "password": "password2"
+		});
+
+		var requestOptions = {
+		  method: 'POST',
+		  headers: myHeaders,
+		  body: raw,
+		  redirect: 'follow'
+		};
+
+		fetch("10.10.9.188:3000/postusers", requestOptions)
+		  .then(response => response.text())
+		  .then(result => console.log(result))
+		  .catch(error => console.log('error', error));
