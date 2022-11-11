@@ -125,6 +125,8 @@ export function AccountInformation({ navigation }) {
 		navigation.navigate('Profile');
 	}
 
+	
+
 	//https://reactnative.dev/docs/handling-text-input
 	const [isEnabled, setIsEnabled] = useState(false);
 	const toggleSwitch = () => setIsEnabled(previousState => !previousState);

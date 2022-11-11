@@ -20,7 +20,6 @@ WebBrowser.maybeCompleteAuthSession();
 //https://developers.google.com/identity/sign-in/web/server-side-flow
 
 function Launch({ navigation }) {
-
 	const [accessToken, setAccessToken] = React.useState();
   	const [userInfo, setUserInfo] = React.useState();
   	const [message, setMessage] = React.useState();
@@ -39,7 +38,7 @@ function Launch({ navigation }) {
 	  }, [response]);
 	
 	  async function getUserData() {
-		let userInfoResponse = await fetch("", {
+		let userInfoResponse = await fetch("https://www.googleapis.com/userinfo/v2/me", {
 		  headers: { Authorization: `Bearer ${accessToken}`}
 		});
 	
@@ -48,16 +47,27 @@ function Launch({ navigation }) {
 		});
 	  }
 
-	  function showUserInfo() {
+	  const showUserInfo = () => {
 		if (userInfo) {
-		  return (
-			<View style={styles.userInfo}>
-			  <Image source={{uri: userInfo.picture}} style={styles.profilePic} />
-			  <Text>Welcome {userInfo.name}</Text>
-			  <Text>{userInfo.email}</Text>
-			</View>
-		  );
+			return (
+				<View>
+				  <Image source={{uri: userInfo.picture}} style={stylesheet.profilePic} />
+				  <Text>Welcome {userInfo.name}</Text>
+				  <Text>{userInfo.email}</Text>
+				</View>
+			  );
 		}
+		else{
+			return(
+				<View>
+						<Image style = {stylesheet.styleImage1} source = {require("../images/FoxLift-1.png")} />
+						  <TouchableOpacity onPress={accessToken ? getUserData : () => { promptAsync({useProxy: true, showInRecents: true}) }}>
+								<Image style = {stylesheet.styleImage3} source = {require("../images/signin-button.png")} />
+							</TouchableOpacity>
+						  <Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
+						  </View>
+			);
+						}
 	  }
 
     const onPressHandler = () => {
@@ -66,11 +76,10 @@ function Launch({ navigation }) {
 
     return (
       <SafeAreaView>
-                <Image style = {stylesheet.styleImage1} source = {require("../images/FoxLift-1.png")} />
-				<TouchableOpacity onPress={accessToken ? getUserData : () => { promptAsync({useProxy: false, showInRecents: true}) }}>
-					  <Image style = {stylesheet.styleImage3} source = {require("../images/signin-button.png")} />
-			  	</TouchableOpacity>
-                <Image style = {stylesheet.styleImage2} source = {{uri: "https://nyc3.digitaloceanspaces.com/sizze-storage/media/images/4M4lqady9IW4Adm4wKJB2VTP.png"}}/>
+                
+				
+			{showUserInfo()}
+
 		</SafeAreaView>
       )
   
@@ -188,6 +197,12 @@ function Launch({ navigation }) {
 	   paddingBottom: 12,
 	   paddingLeft: 16,
    },
+   profilePic: {
+    width: 50,
+    height: 50,
+	alignItems: 'center',
+    justifyContent: 'center',
+  }
 
 
 })

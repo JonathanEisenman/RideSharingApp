@@ -37,8 +37,8 @@ const ProfileStackScreen = () => (
 const ActivityStackScreen = () => (
         <ActivityStack.Navigator>
             <ActivityStack.Screen name = "Activity" component = {Activity} />
-            <ActivityStack.Screen name = "Upcoming Rides" component = {UpcomingRides} />
-            <ActivityStack.Screen name = "Past Rides" component = {PastRides} />
+            <ActivityStack.Screen name = "Upcoming Trip Requests" component = {UpcomingRides} />
+            <ActivityStack.Screen name = "Past Trip Requests" component = {PastRides} />
         </ActivityStack.Navigator>
 )
 

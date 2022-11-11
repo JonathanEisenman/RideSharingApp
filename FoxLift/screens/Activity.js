@@ -18,12 +18,12 @@ import { NavigationActions } from 'react-navigation';
 function Activity({ navigation }) {
 
 	const toUpcoming = () => {
-		navigation.navigate('Upcoming Rides');
+		navigation.navigate('Upcoming Trip Requests');
 	}
 
 
 	const toPast = () => {
-		navigation.navigate('Past Rides');
+		navigation.navigate('Past Trip Requests');
 	}
 	return (
 		<SafeAreaView>
@@ -31,7 +31,7 @@ function Activity({ navigation }) {
 				<View style = {stylesheet.styleWrapButton}>
 					<View style = {stylesheet.styleButton}>
 						<Text style = {stylesheet.styleText}>
-							{`Past Rides`}
+							{`Past Trip Requests`}
 						</Text>
 					</View>
 				</View>	
@@ -41,7 +41,7 @@ function Activity({ navigation }) {
 				<View style = {stylesheet.styleWrapButtonCopy2}>
 					<View style = {stylesheet.styleButtonCopy2}>
 						<Text style = {stylesheet.styleText}>
-							{`Upcoming Rides`}
+							{`Upcoming Trip Requests`}
 						</Text>
 					</View>
 				</View>	
@@ -80,13 +80,15 @@ export function UpcomingRides({ navigation }) {
 			<Button title='Done'
 		onPress={backToActivity}
 		/>
-		<Text></Text>
+
 		{isLoading ? <ActivityIndicator/> : (
 		<FlatList
           data={data}
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
-            <Text>{item.startLocation + ' ' + item.destination + ' ' + item.time + ' '+ item.type + "\n"}</Text>
+            <TouchableOpacity>
+				<Text>{item.startLocation + ' ' + item.destination + ' ' + item.time + ' '+ item.type + "\n"}</Text>
+			</TouchableOpacity>
           )}
         />
 		)}

@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
   Text,
 } from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, animateCamera } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import  MapViewDirections  from 'react-native-maps-directions';
@@ -30,6 +30,7 @@ const INITIAL_POSITION = {
   longitude: -73.935480,
   latitudeDelta: LATITUDE_DELTA,
   longitudeDelta: LONGITUDE_DELTA,
+  
 };
 
 type InputAutoCompleteProps = {
@@ -85,12 +86,14 @@ function Home({ navigation }) {
   const [destination, setDestination] = useState({});
 
   const moveTo = async (position: LatLng) => {
-    const camera = await mapRef.current?.getCamera()
+    const camera = await mapRef.current.getCamera()
     if (camera) {
       camera.center = position;
-      mapRef.current?.animateCamera(camera, {duration: 1000});
+      camera.zoom = 15;
+      mapRef.current.animateCamera(camera, {duration: 1000});
     }
   };
+
 
   const onPlaceSelected = (
     details: GooglePlaceDetail | null,
@@ -104,7 +107,6 @@ function Home({ navigation }) {
       }
       set(position);
       moveTo(position);
-
     };
 
   const checkPermission =async()=>{
