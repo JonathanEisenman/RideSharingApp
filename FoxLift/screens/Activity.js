@@ -61,7 +61,7 @@ export function UpcomingRides({ navigation }) {
 
 	  const getTrips = async () => {
 		try {
-		 const response = await fetch('http://10.10.9.188:3000/gettrips');
+		 const response = await fetch('http://10.10.9.188:3000/gettrips?isCancelled=0&isCompleted=0');
 		 const json = await response.json();
 		 setData(json);
 	   } catch (error) {
@@ -70,6 +70,11 @@ export function UpcomingRides({ navigation }) {
 		 setLoading(false);
 	   }
 	 }
+
+	 const formatDate = (dateString) => {
+		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
+		return new Date(dateString).toLocaleDateString(undefined, options)
+	  }	  
    
 	 useEffect(() => {
 	   getTrips();
@@ -87,7 +92,7 @@ export function UpcomingRides({ navigation }) {
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
             <TouchableOpacity>
-				<Text>{item.startLocation + ' ' + item.destination + ' ' + item.time + ' '+ item.type + "\n"}</Text>
+				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
 			</TouchableOpacity>
           )}
         />
@@ -98,15 +103,51 @@ export function UpcomingRides({ navigation }) {
 
 export function PastRides({ navigation }) {
 
+	const [isLoading, setLoading] = useState(true);
+  	const [data, setData] = useState([]);
+
 	const backToActivity = () => {
 		navigation.navigate('Activity');
 	}
+
+	const formatDate = (dateString) => {
+		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
+		return new Date(dateString).toLocaleDateString(undefined, options)
+	}	 
+
+	const getTrips = async () => {
+		try {
+		 const response = await fetch('http://10.10.9.188:3000/gettripsor?isCompleted=1&isCancelled=1');
+		 const json = await response.json();
+		 setData(json);
+	   } catch (error) {
+		 console.error(error);
+	   } finally {
+		 setLoading(false);
+	   }
+	}
+
+	useEffect(() => {
+		getTrips();
+	  }, []);
+
 
 	return (
 		<SafeAreaView>
 			<Button title='Done'
 		onPress={backToActivity}
 		/>
+		{isLoading ? <ActivityIndicator/> : (
+		<FlatList
+          data={data}
+          keyExtractor={({ tID }, index) => tID}
+          renderItem={({ item }) => (
+            <TouchableOpacity>
+				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
+			</TouchableOpacity>
+          )}
+        />
+		)}
 		</SafeAreaView>
 	)
 }

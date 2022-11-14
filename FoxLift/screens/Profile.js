@@ -20,6 +20,13 @@ function Profile({ navigation }) {
 		navigation.navigate('Settings');
 	}
 
+	const toLaunch = () => {
+		navigation.navigate('Launch');
+	}
+
+	const toTermsConditions = () => {
+		navigation.navigate('Terms and Conditions');
+	}
 
 	const toAccountInfo = () => {
 		navigation.navigate('Account Information');
@@ -37,6 +44,12 @@ function Profile({ navigation }) {
 
 	return (
 		<SafeAreaView>
+			<View style = {stylesheet.styleContainer}>
+				<Text style = {stylesheet.styleTitle}> Sean Ginsberg </Text>
+				<Text style = {stylesheet.styleAccountText}>Driver</Text>
+				<Text style = {stylesheet.styleAccountText}> seanyg </Text>
+				<Text style = {stylesheet.styleAccountText}> seanygberg@gmail.com </Text>
+			</View>
 			<TouchableOpacity onPress={toAccountInfo}>
 				<View style = {stylesheet.styleWrapButton}>
 					<View style = {stylesheet.styleButton}>
@@ -47,11 +60,21 @@ function Profile({ navigation }) {
 				</View>	
 			</TouchableOpacity>
 
-			<TouchableOpacity onPress={toSettings}>
+			<TouchableOpacity onPress={toTermsConditions}>
 				<View style = {stylesheet.styleWrapButtonCopy2}>
 					<View style = {stylesheet.styleButtonCopy2}>
 						<Text style = {stylesheet.styleText}>
-							{`Settings`}
+						{`Terms and Conditions`}
+						</Text>
+					</View>
+				</View>	
+			</TouchableOpacity>
+
+			<TouchableOpacity onPress={toLaunch}>
+				<View style = {stylesheet.styleWrapButtonCopy3}>
+					<View style = {stylesheet.styleButton}>
+						<Text style = {stylesheet.styleText}>
+							{`Logout`}
 						</Text>
 					</View>
 				</View>	
@@ -170,16 +193,15 @@ export function AccountInformation({ navigation }) {
 }
 
 export function TermsConditions({ navigation }) {
-	const backToSettings = () => {
-		navigation.navigate('Settings');
+	const backToProfile = () => {
+		navigation.navigate('Profile');	
 	}
-
 	return (
 		<SafeAreaView>
 			<Text>WE ARE NOT RESPONSIBLE FOR THINGS THAT CAN GO WRONG DURING A RIDE SHARE!</Text>
 			
 			<Button title='Done'
-			onPress={backToSettings}
+			onPress={backToProfile}
 			/>
 		</SafeAreaView>
 		
@@ -218,7 +240,7 @@ const stylesheet = StyleSheet.create({
 	   position: "absolute",
 	   left: 0.3571428571428896,
 	   right: -0.3571428571428896,
-	   top: 388.42857142857116,
+	   top: 300,
 	   width: "auto",
 	   height: "auto",
 	   display: "flex",
@@ -285,7 +307,24 @@ styleWrapButtonCopy2: {
 	position: "absolute",
 	left: 0.3571428571428896,
 	right: -0.3571428571428896,
-	top: 254.4285714285712,
+	top: 400,
+	width: "auto",
+	height: "auto",
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "center",
+	alignItems: "center",
+	paddingTop: 12,
+	paddingRight: 16,
+	paddingBottom: 12,
+	paddingLeft: 16,
+},
+
+styleWrapButtonCopy3: {
+	position: "absolute",
+	left: 0.3571428571428896,
+	right: -0.3571428571428896,
+	top: 500,
 	width: "auto",
 	height: "auto",
 	display: "flex",
@@ -341,6 +380,26 @@ styleMessagesIcon: {
 
 },
 
+styleContainer: {
+	marginTop: 10,
+	position: "absolute",
+	alignSelf: "center",
+	alignItems: "center"
+},
+
+styleTitle: {
+	fontFamily: "HelveticaNeue",
+	fontSize: 36,
+	flexWrap: "wrap",
+	marginTop: 20,
+},
+
+styleAccountText: {
+	fontFamily: "HelveticaNeue",
+	fontSize: 16,
+	flexWrap: "wrap",
+	marginBottom: 20,
+},
 
 })
 
