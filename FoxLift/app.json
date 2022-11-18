@@ -1,8 +1,9 @@
 {
   "expo": {
+    "owner": "jake.vissicchio1",
     "name": "FoxLift",
     "scheme": "FoxLift",
-    "slug": "FoxLift",
+    "slug": "foxlift",
     "privacy": "public",
     "version": "1.0.0",
     "orientation": "portrait",

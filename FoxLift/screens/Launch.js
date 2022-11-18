@@ -12,6 +12,10 @@ import {
 import { NavigationActions } from 'react-navigation';
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
+import * as AuthSession from 'expo-auth-session';
+//import * as GoogleSignIn from 'expo-google-sign-in';
+import Constants from 'expo-constants';
+import * as Linking from 'expo-linking';
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -24,11 +28,21 @@ function Launch({ navigation }) {
   	const [userInfo, setUserInfo] = React.useState();
   	const [message, setMessage] = React.useState();
 
+	const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@jake.vissicchio1/foxlift' };
+	const NATIVE_REDIRECT_PARAMS = { native: "com.foxlift.foxlift://" };
+	const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
+
 	const [request, response, promptAsync] = Google.useAuthRequest({
 		//androidClientId: "",
 		iosClientId: "136934915450-20roe1ao7nc18jhu9mk0p6oln3si3n5c.apps.googleusercontent.com",
-		expoClientId: "136934915450-4mf17sotm04kp7lflij1ldlnk0im269o.apps.googleusercontent.com"
-	});
+		expoClientId: "136934915450-4mf17sotm04kp7lflij1ldlnk0im269o.apps.googleusercontent.com",
+		redirectUri: AuthSession.makeRedirectUri({ 
+			REDIRECT_PARAMS,
+			useProxy: true
+		}), 
+	},
+	{ useProxy: true }
+	);
 
 	React.useEffect(() => {
 		setMessage(JSON.stringify(response));
@@ -47,8 +61,30 @@ function Launch({ navigation }) {
 		});
 	  }
 
+	  const postUser = async()=>{
+		if (userInfo){
+		fetch("http://10.10.9.188:3000/postusers",{
+		  method:"post",
+		  header:{
+			Accept:"application/json",
+			"Content-Type":"application/json",
+		  },
+		  body:JSON.stringify({
+			name: userInfo.name,
+			accountName: "",
+			isDriver: "0",
+			email: userInfo.email,
+		  }),
+		}).then((res)=>{
+		  if(res.ok){
+			console.log("User added to database");
+		  }
+		})
+	  }}
+
 	  const showUserInfo = () => {
 		if (userInfo) {
+			{postUser()}
 			return (
 				<View>
 				  <Image source={{uri: userInfo.picture}} style={stylesheet.profilePic} />
@@ -56,6 +92,7 @@ function Launch({ navigation }) {
 				  <Text>{userInfo.email}</Text>
 				</View>
 			  );
+			  
 		}
 		else{
 			return(
@@ -75,9 +112,8 @@ function Launch({ navigation }) {
     }
 
     return (
-      <SafeAreaView>
+      	<SafeAreaView>
                 
-				
 			{showUserInfo()}
 
 		</SafeAreaView>
