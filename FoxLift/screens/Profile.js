@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -9,12 +9,32 @@ import {
   TextInput,
   SafeAreaView,
   Switch,
+  FlatList,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
 
 function Profile({ navigation }) {
+
+	const [isLoading, setLoading] = useState(true);
+	const [data, setData] = useState([]);
+
+	const getProfile = async () => {
+		try {
+			const response = await fetch('http://10.10.9.188:3000/getusers?uid=4');
+		 	const json = await response.json();
+		 	setData(json);
+		} catch (error) {
+			console.error(error);
+		  } finally {
+			setLoading(false);
+		  }
+	}
+
+	useEffect(() => {
+		getProfile();
+	}, []);
 
 	const toSettings = () => {
 		navigation.navigate('Settings');
@@ -35,20 +55,38 @@ function Profile({ navigation }) {
 	const onPressHandlerActivity = () => {
 		navigation.navigate('Activity');
 	  }
-	  const onPressHandlerMessages = () => {
-		navigation.navigate('Messages');
-	  }
-	  const onPressHandlerHome = () => {
-		navigation.navigate('Home');
-	  }
+	
+	const onPressHandlerMessages = () => {
+	navigation.navigate('Messages');
+	}
+	
+	const onPressHandlerHome = () => {
+	navigation.navigate('Home');
+	}
+
+	const convertDriver = (int) => {
+		if (int === 0) {
+			return "Passenger";
+		} else {
+			return "Driver";
+		}
+	}
 
 	return (
 		<SafeAreaView>
 			<View style = {stylesheet.styleContainer}>
-				<Text style = {stylesheet.styleTitle}> Sean Ginsberg </Text>
-				<Text style = {stylesheet.styleAccountText}>Driver</Text>
-				<Text style = {stylesheet.styleAccountText}> seanyg </Text>
-				<Text style = {stylesheet.styleAccountText}> seanygberg@gmail.com </Text>
+				<FlatList
+				data  = {data}
+				keyExtractor={({ uID }, index) => uID}
+				renderItem={({ item }) => (
+					<React.Fragment>
+						<Text style = {stylesheet.styleTitle}> {item.name} </Text>
+						<Text style = {stylesheet.styleAccountText}>{convertDriver(item.isDriver)}</Text>
+						<Text style = {stylesheet.styleAccountText}> {item.accountName} </Text>
+						<Text style = {stylesheet.styleAccountText}> {item.email} </Text>
+					</React.Fragment>
+				)}
+				/>
 			</View>
 			<TouchableOpacity onPress={toAccountInfo}>
 				<View style = {stylesheet.styleWrapButton}>
@@ -399,6 +437,7 @@ styleAccountText: {
 	fontSize: 16,
 	flexWrap: "wrap",
 	marginBottom: 20,
+	textAlign: 'center',
 },
 
 })
