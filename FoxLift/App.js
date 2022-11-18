@@ -13,9 +13,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createStackNavigator();
 
-//TODO:
-//In globals folder create a styles.js file that contains any styles reused in multiple screens
-//Also in globals folder create data.js file that contains UI info like messages
 
 function App() {
   return (

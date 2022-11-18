@@ -8,12 +8,16 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Text,
+  Button,
+  Alert,
 } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker, animateCamera } from 'react-native-maps';
 import * as Location from 'expo-location';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import  MapViewDirections  from 'react-native-maps-directions';
 import Constants from 'expo-constants';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { Modal, ModalContent } from 'react-native-modals';
 
 import { mapStyle } from '../globals/MapStyle';
 
@@ -36,7 +40,7 @@ const INITIAL_POSITION = {
 type InputAutoCompleteProps = {
   label: string;
   placeholder: string;
-  onPlaceSelected: (details: GooglePlaceDetail | null) => void;
+  onPlaceSelected: (data: GooglePlaceData | null, details: GooglePlaceDetail | null) => void;
 };
 
 function InputAutoComplete({
@@ -54,7 +58,8 @@ function InputAutoComplete({
         fetchDetails = {true}
         onPress={(data, details = null) => {
        // 'details' is provided when fetchDetails = true
-        onPlaceSelected(details);
+        onPlaceSelected(data, details);
+        //console.log(data);
         }}
         onFail={error => console.error(error)}
         query={{
@@ -69,9 +74,6 @@ function InputAutoComplete({
 }
 
 
-const origin = {latitude: 41.720970, longitude: -73.935480};
-const destination = {latitude: 41.7059237, longitude: -73.9388277};
-
 
 //https://www.npmjs.com/package/react-native-google-places-autocomplete
 //https://www.npmjs.com/package/react-native-maps-directions
@@ -84,9 +86,32 @@ function Home({ navigation }) {
   //These functions are called when the user selects the google autocomplete place
   const [origin, setOrigin] = useState({});
   const [destination, setDestination] = useState({});
+  const [originName, setOriginName] = useState({});
+  const [destinationName, setDestinationName] = useState({});
+
+  //Called when user clicks the calculate route button
   const [showDirections, setShowDirections] = useState(false);
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(0);
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [date, setDate] = useState();
+
+  const [userRole, setUserRole] = useState({});
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false);
+  };
+
+  const handleConfirm = (date) => {
+    console.log("A date has been picked: ", date);
+    setDate(date);
+    hideDatePicker();
+  };
 
   const moveTo = async (position: LatLng) => {
     const camera = await mapRef?.current.getCamera()
@@ -99,14 +124,18 @@ function Home({ navigation }) {
 
 
   const onPlaceSelected = (
+    data: GooglePlaceData | null,
     details: GooglePlaceDetail | null,
     flag: "origin" | "destination") => {
       const set = flag === "origin" ? setOrigin : setDestination
+      const setName = flag === "origin" ? setOriginName : setDestinationName
       const position = {
         latitude: details.geometry.location.lat,
         longitude: details.geometry.location.lng
       }
+      const placeName = data.description
       set(position);
+      setName(placeName);
       moveTo(position);
     };
 
@@ -133,12 +162,41 @@ function Home({ navigation }) {
       }
     }
 
+    const createRideShare = () =>  {
+      //Only allow to create a ride share when origin and destination are selected
+      if (showDirections && date) {
+        navigation.navigate('Activity', {
+          //screen: 'Upcoming Trip Requests',
+        });
+        
+      //Call to add trip into the database
+        postTrips();
 
-    const createRideShare = () => {
 
+      }
 
     }
     
+    const postTrips = async()=>{
+      fetch("http://10.10.9.188:3000/posttrips",{
+        method:"post",
+        header:{
+          Accept:"application/json",
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({
+          tID: "15",
+          destination: destinationName,
+          startLocation: originName,
+          time: date,
+          type: "Ride Share",
+        }),
+      }).then((res)=>{
+        if(res.ok){
+          console.log("Trip added to database");
+        }
+      })
+    }
 
   const checkPermission =async()=>{
       const hasPermission = await Location.requestForegroundPermissionsAsync();
@@ -168,7 +226,15 @@ function Home({ navigation }) {
   
       }
   }
-
+/*
+  const promptUser = () => {
+    Alert.alert('Alert Title', 'Do you have a car to use?', [
+      {
+        text: 'No', onPress: () => setUserRole('Passenger') },
+      { text: 'Yes', onPress: () => setUserRole('Driver') },
+    ]);
+  };
+*/
   
 const mapRef = useRef(1)
 
@@ -207,12 +273,14 @@ useEffect(()=>{
             </MapView>
 
             <View style = {stylesheet.search}>
-              <InputAutoComplete label = "Origin" onPlaceSelected = {(details) => {
-                onPlaceSelected(details, "origin")
+              <InputAutoComplete label = "Origin" onPlaceSelected = {(data, details) => {
+                onPlaceSelected(data, details, "origin")
               }}/>
-              <InputAutoComplete label = "Destination" onPlaceSelected = {(details) => {
-                onPlaceSelected(details, "destination")
+              <InputAutoComplete label = "Destination" onPlaceSelected = {(data, details) => {
+                onPlaceSelected(data, details, "destination")
               }}/>
+
+              <Button title="Select Date for Ride" onPress={showDatePicker} />
 
               <TouchableOpacity style = {stylesheet.button} onPress = {traceRoute}> 
                 <Text style = {stylesheet.buttonText}> Trace Route</Text>
@@ -225,10 +293,17 @@ useEffect(()=>{
               </View>
               ): null}
 
-            <TouchableOpacity style = {stylesheet.button} onPress = {() => {createRideShare}}>
+            <TouchableOpacity style = {stylesheet.button} onPress = { () => {createRideShare()}}>
                 <Text style = {stylesheet.buttonText}> Confirm Ride</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>      
 
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="datetime"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+            
             </View>
 
 
@@ -251,9 +326,9 @@ useEffect(()=>{
   },
 
   map:{
-    height: 700,
+    height: 770,
     marginVertical: 0,
-    width:SCREEN_WIDTH*0.92,
+    width:SCREEN_WIDTH,
   },
 
   search: {
@@ -267,7 +342,7 @@ useEffect(()=>{
     elevation: 4,
     padding: 8,
     borderRadius: 8,
-    top: Constants.statusBarHeight,
+    top: 10,
   },
 
   input: {

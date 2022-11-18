@@ -27,7 +27,7 @@ const MessagesStack = createStackNavigator();
 
 const ProfileStackScreen = () => (
         <ProfileStack.Navigator>
-            <ProfileStack.Screen name = "Profile" component = {Profile} />
+            <ProfileStack.Screen name = "Profile2" component = {Profile} options={{ headerShown: false }}/>
             <ProfileStack.Screen name = "Settings" component = {Settings} />
             <ProfileStack.Screen name = "Account Information" component = {AccountInformation} />
             <ProfileStack.Screen name = "Terms and Conditions" component = {TermsConditions} />
@@ -36,7 +36,7 @@ const ProfileStackScreen = () => (
 
 const ActivityStackScreen = () => (
         <ActivityStack.Navigator>
-            <ActivityStack.Screen name = "Activity" component = {Activity} />
+            <ActivityStack.Screen name = "Activity2" component = {Activity} options={{ headerShown: false }}/>
             <ActivityStack.Screen name = "Upcoming Trip Requests" component = {UpcomingRides} />
             <ActivityStack.Screen name = "Past Trip Requests" component = {PastRides} />
         </ActivityStack.Navigator>
@@ -101,7 +101,7 @@ export default function MainContainer(){
 
 
 
-                <Tab.Screen name={homeName} component={Home} />
+                <Tab.Screen name={homeName} component={Home} options={{ headerShown: false }}/>
                 <Tab.Screen name={activityName} component={ActivityStackScreen} />
                 <Tab.Screen name={messagesName} component={Messages} />
                 <Tab.Screen name={profileName} component={ProfileStackScreen} />
