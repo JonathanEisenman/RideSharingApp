@@ -14,6 +14,9 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 
+import {newUID} from './Launch';
+
+
 
 function Profile({ navigation }) {
 
@@ -22,7 +25,7 @@ function Profile({ navigation }) {
 
 	const getProfile = async () => {
 		try {
-			const response = await fetch('http://10.10.9.188:3000/getusers?uid=1');
+			const response = await fetch('http://10.10.9.188:3000/getusers?uid=' + newUID);
 		 	const json = await response.json();
 		 	setData(json);
 		} catch (error) {

@@ -8,14 +8,15 @@ import {
   Button, 
   TouchableOpacity,
   SafeAreaView,
+  FlatList,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from 'expo-auth-session';
-//import * as GoogleSignIn from 'expo-google-sign-in';
 import Constants from 'expo-constants';
-import * as Linking from 'expo-linking';
+
+export {newUID};
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -23,14 +24,27 @@ WebBrowser.maybeCompleteAuthSession();
 //https://docs.expo.dev/versions/latest/sdk/auth-session/
 //https://developers.google.com/identity/sign-in/web/server-side-flow
 
+/*
+	TODO: 
+	Need to pass around insertID.
+	To do this we can make a new fetch to getusers where email = userInfo.email then store the insertID to a variable.
+	('http://10.10.9.188:3000/getusers?email=' + userInfo.email)
+*/
+
+var newUID = 0;
+
 function Launch({ navigation }) {
 	const [accessToken, setAccessToken] = React.useState();
   	const [userInfo, setUserInfo] = React.useState();
   	const [message, setMessage] = React.useState();
+	const [data, setData] = useState([]);
 
 	const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@jake.vissicchio1/foxlift' };
 	const NATIVE_REDIRECT_PARAMS = { native: "com.foxlift.foxlift://" };
 	const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
+
+	//var newUID;
+	var isIdSet = false;
 
 	const [request, response, promptAsync] = Google.useAuthRequest({
 		//androidClientId: "",
@@ -75,24 +89,50 @@ function Launch({ navigation }) {
 			isDriver: "0",
 			email: userInfo.email,
 		  }),
-		}).then((res)=>{
+		})
+		.then((res)=>{
 		  if(res.ok){
 			console.log("User added to database");
 		  }
+		  
 		})
 	  }}
 
+	  const getCurrUser = async()=>{
+		if (isIdSet === false){
+		if (userInfo){
+			const response = await fetch('http://10.10.9.188:3000/getusers?email=' + userInfo.email);
+		 	const json = await response.json();
+          	setData(json[0].uID);
+		  	newUID = data;
+			console.log(newUID);
+			//isIdSet = true;
+      	}
+		  isIdSet = true;
+	}
+		}
+		
+
+
 	  const showUserInfo = () => {
 		if (userInfo) {
-			{postUser()}
-			return (
-				<View>
-				  <Image source={{uri: userInfo.picture}} style={stylesheet.profilePic} />
-				  <Text>Welcome {userInfo.name}</Text>
-				  <Text>{userInfo.email}</Text>
-				</View>
-			  );
-			  
+			if(isIdSet === false){
+			{postUser()};
+			{getCurrUser()};
+			//console.log(newUID);
+			// return (
+			// 	<View>
+			// 	  <Image source={{uri: userInfo.picture}} style={stylesheet.profilePic} />
+			// 	  <Text>Welcome {userInfo.name}</Text>
+			// 	  <Text>{userInfo.email}</Text>
+			// 	</View>
+			//   );
+			navigation.navigate({
+				name: 'Home',
+			});
+			alert('Welcome' + ' ' + userInfo.email);
+			
+		}
 		}
 		else{
 			return(

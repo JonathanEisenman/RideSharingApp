@@ -18,8 +18,9 @@ import  MapViewDirections  from 'react-native-maps-directions';
 import Constants from 'expo-constants';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Modal, ModalContent } from 'react-native-modals';
-
 import { mapStyle } from '../globals/MapStyle';
+
+import {newUID} from './Launch';
 
 const GOOGLE_MAPS_API_KEY = "AIzaSyBVzXhTkavu5eAiixabE7GYvGpg8X2WPOU";
 
@@ -191,7 +192,7 @@ function Home({ navigation }) {
           "Content-Type":"application/json",
         },
         body:JSON.stringify({
-          uID: "15",
+          uID: newUID.toString(),
           destination: destinationName,
           startLocation: originName,
           time: date,
