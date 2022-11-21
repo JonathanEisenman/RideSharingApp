@@ -107,8 +107,14 @@ function Home({ navigation }) {
     setDatePickerVisibility(false);
   };
 
+  const formatDate = (date) => {
+    date = date.toISOString().replace('T',' ').replace('Z','');
+    return date;
+  };
+
   const handleConfirm = (date) => {
-    console.log("A date has been picked: ", date);
+    date = formatDate(date);
+    console.log("A date has been picked: ", date);    
     setDate(date);
     hideDatePicker();
   };
@@ -185,7 +191,7 @@ function Home({ navigation }) {
           "Content-Type":"application/json",
         },
         body:JSON.stringify({
-          tID: "15",
+          uID: "15",
           destination: destinationName,
           startLocation: originName,
           time: date,

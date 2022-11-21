@@ -22,7 +22,7 @@ function Profile({ navigation }) {
 
 	const getProfile = async () => {
 		try {
-			const response = await fetch('http://10.10.9.188:3000/getusers?uid=4');
+			const response = await fetch('http://10.10.9.188:3000/getusers?uid=1');
 		 	const json = await response.json();
 		 	setData(json);
 		} catch (error) {
