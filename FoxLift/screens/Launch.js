@@ -15,6 +15,7 @@ import * as Google from "expo-auth-session/providers/google";
 import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from 'expo-auth-session';
 import Constants from 'expo-constants';
+import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
 
 export {newUID};
 
@@ -32,19 +33,22 @@ WebBrowser.maybeCompleteAuthSession();
 */
 
 var newUID = 0;
+var emailDupe = false;
+var isIdSet = false;
 
 function Launch({ navigation }) {
 	const [accessToken, setAccessToken] = React.useState();
   	const [userInfo, setUserInfo] = React.useState();
   	const [message, setMessage] = React.useState();
 	const [data, setData] = useState([]);
+	
 
 	const EXPO_REDIRECT_PARAMS = { useProxy: true, projectNameForProxy: '@jake.vissicchio1/foxlift' };
 	const NATIVE_REDIRECT_PARAMS = { native: "com.foxlift.foxlift://" };
 	const REDIRECT_PARAMS = Constants.appOwnership === 'expo' ? EXPO_REDIRECT_PARAMS : NATIVE_REDIRECT_PARAMS;
 
 	//var newUID;
-	var isIdSet = false;
+	//var isIdSet = false;
 
 	const [request, response, promptAsync] = Google.useAuthRequest({
 		//androidClientId: "",
@@ -75,8 +79,28 @@ function Launch({ navigation }) {
 		});
 	  }
 
-	  const postUser = async()=>{
+	  const doesEmailExist = async()=>{
+		//if (emailDupe == false){
 		if (userInfo){
+			const response = await fetch('http://10.10.9.188:3000/getusers?email=' + userInfo.email);
+		 	const json = await response.json();
+          	setData(json[0].email);
+		  	if (data == userInfo.email)
+			{
+				console.log(data);
+				emailDupe = true;
+			}
+			else{}
+			//isIdSet = true;
+      	}
+	//}
+	}
+		
+
+	  const postUser = async()=>{
+		if (emailDupe == false){
+		if (userInfo){
+		const randomName = uniqueNamesGenerator({ dictionaries: [colors, animals] }); // big_red_donkey
 		fetch("http://10.10.9.188:3000/postusers",{
 		  method:"post",
 		  header:{
@@ -85,7 +109,7 @@ function Launch({ navigation }) {
 		  },
 		  body:JSON.stringify({
 			name: userInfo.name,
-			accountName: "",
+			accountName: randomName,
 			isDriver: "0",
 			email: userInfo.email,
 		  }),
@@ -97,9 +121,10 @@ function Launch({ navigation }) {
 		  
 		})
 	  }}
+	}
 
 	  const getCurrUser = async()=>{
-		if (isIdSet === false){
+		if (isIdSet == false){
 		if (userInfo){
 			const response = await fetch('http://10.10.9.188:3000/getusers?email=' + userInfo.email);
 		 	const json = await response.json();
@@ -116,8 +141,12 @@ function Launch({ navigation }) {
 
 	  const showUserInfo = () => {
 		if (userInfo) {
-			if(isIdSet === false){
-			{postUser()};
+			if(isIdSet == false){
+			{doesEmailExist()}
+			if (emailDupe == false)
+			{
+				{postUser()};
+			}
 			{getCurrUser()};
 			//console.log(newUID);
 			// return (
