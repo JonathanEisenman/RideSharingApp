@@ -59,6 +59,10 @@ function Profile({ navigation }) {
 		navigation.navigate('Activity');
 	  }
 	
+	const toFavorites = () => {
+		navigation.navigate('Favorites');
+	}
+	
 	const onPressHandlerMessages = () => {
 	navigation.navigate('Messages');
 	}
@@ -96,6 +100,16 @@ function Profile({ navigation }) {
 					<View style = {stylesheet.styleButton}>
 						<Text style = {stylesheet.styleText}>
 							{`Account Information`}
+						</Text>
+					</View>
+				</View>	
+			</TouchableOpacity>
+			
+			<TouchableOpacity onPress={toFavorites}>
+				<View style = {stylesheet.styleWrapButtonCopy4}>
+					<View style = {stylesheet.styleButtonCopy4}>
+						<Text style = {stylesheet.styleText}>
+							{`Favorites`}
 						</Text>
 					</View>
 				</View>	
@@ -366,6 +380,35 @@ styleWrapButtonCopy3: {
 	left: 0.3571428571428896,
 	right: -0.3571428571428896,
 	top: 500,
+	width: "auto",
+	height: "auto",
+	display: "flex",
+	flexDirection: "column",
+	justifyContent: "center",
+	alignItems: "center",
+	paddingTop: 12,
+	paddingRight: 16,
+	paddingBottom: 12,
+	paddingLeft: 16,
+},
+
+styleButtonCopy4: {
+	width: "100%",
+	height: "auto",
+	display: "flex",
+	flexDirection: "row",
+	justifyContent: "center",
+	alignItems: "center",
+	padding: 12,
+	borderRadius: 10,
+	backgroundColor: "red",
+},
+
+styleWrapButtonCopy4: {
+	position: "absolute",
+	left: 0.3571428571428896,
+	right: -0.3571428571428896,
+	top: 200,
 	width: "auto",
 	height: "auto",
 	display: "flex",
