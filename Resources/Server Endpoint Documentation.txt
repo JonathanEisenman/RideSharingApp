@@ -1,10 +1,9 @@
-
 GET Endpoints:
     # All these endpoints can be sent parameters that are column names
 
 	# These endpoints use 'AND' between parameters
-	# Example: SELECT * FROM users WHERE uid="1" AND fName="Anthony"
-	# http://10.10.9.188:3000/getusers?uid=1&fName=Anthony
+	# Example: SELECT * FROM users WHERE uid="1" AND name="Anthony"
+	# http://10.10.9.188:3000/getusers?uid=1&name=Anthony
 	/getusers
 	/gettrips
 	/gettake
@@ -23,36 +22,70 @@ GET Endpoints:
 	/getmessageor
 
     # Other GET Endpoints
+	/getopentrips
+	    # Takes parameter "uID", returns trips that user is able to join
+	    # Returns trips where isCompleted=0, isCancelled=0, SeatsAvailable>0, and user not already on the trip
+	    # Example: SELECT * FROM trips WHERE isCompleted = 0 AND isCancelled = 0 AND SeatsAvailable > 0 AND tID NOT IN (SELECT tID FROM take WHERE uID='1')
+	    # http://10.10.9.188:3000/getopentrips?uID=1
+
+	/getusertrips
+	    # Takes parameter "uID", returns trips the user has joined
+	    # Example: SELECT * FROM trips WHERE tID IN (SELECT tID FROM take WHERE uID=1)
+	    # http://10.10.9.188:3000/getusertrips?uID=1
+
+	/getuserstomessage
+	    # Takes parameter "uID", returns users on trips that the user is on and can message
+	    # Example: SELECT * FROM users WHERE uID IN (SELECT uID FROM take WHERE tID IN (SELECT tID FROM take WHERE uID=1))
+	    # http://10.10.9.188:3000/getuserstomessage?uID=1
+
 	/gettripsrange
-	    # Takes parameters "min" and "max", only shows non-cancelled and non-completed trips
+	    # Takes parameters "min" and "max", only returns non-completed and non-cancelled trips
 	    # Example: SELECT * FROM trips WHERE time >= MIN_TIMESTAMP AND time <= MAX_TIMESTAMP AND isCompleted=0 AND isCancelled=0 ORDER BY time ASC
 	    # http://10.10.9.188:3000/gettripsrange?min=MIN_TIMESTAMP&max=MAX_TIMESTAMP
 
-POST ENDPOINTs:
-    # STILL IN DEVELOPMENT
-	/postusers
-		JAVASCRIPT FETCH IMPLEMENTATION
-		var myHeaders = new Headers();
-		myHeaders.append("Content-Type", "application/json");
 
-		var raw = JSON.stringify({
-		  "fName": "fName2",
-		  "lName": "lName2",
-		  "uID": "2",
+PUT Endpoints:
+    # All these endpoints can be sent parameters that are column names
+	/updatetrips
+	    # Updates an entry into the take table identified by the tID
+	    # Example: UPDATE trips SET isCompleted=1 WHERE tID=1
+	    # http://10.10.9.188:3000/updatetrips?tID=1&isCompleted=1;
+	
+
+POST Endpoints:
+	/postusers
+	    # Adds a new user to the users table, takes JSON with the name, accountName, and email of the new user
+	    # Example: INSERT INTO users (name, accountName, isDriver, email) VALUES (name2, accountName2, 0, email)
+	    # http://10.10.9.188:3000/postusers
+	    # POST Request Details:
+		Headers:	"Content-Type", "application/json"
+		Body:		JSON.stringify({
+		  "name": "name2",
 		  "accountName": "accountName2",
-		  "isDriver": "0",
-		  "email": "email2@gmail.com",
-		  "password": "password2"
+		  "email": "email2@gmail.com"
 		});
 
-		var requestOptions = {
-		  method: 'POST',
-		  headers: myHeaders,
-		  body: raw,
-		  redirect: 'follow'
-		};
+	/posttrips
+	    # Adds a new trip to the trips table, and adds the creating user to that trip in the take table
+	    # Example: INSERT INTO trips (destination, startLocation, time, seatsAvailable, isCompleted, isCancelled) VALUES (destination4, sLocation4, time4, 0, 0)
+		    INSERT INTO take (uID, tID) VALUES (creatingUserID, tID)
+	    # http://10.10.9.188:3000/posttrips
+	    # POST Request Details:
+		Headers:	"Content-Type", "application/json"
+		Body:		JSON.stringify({
+		  "uID": "creatingUserID",
+		  "destination": "destination4",
+		  "startLocation": "sLocation4",
+		  "time": "time4"
+		});
 
-		fetch("10.10.9.188:3000/postusers", requestOptions)
-		  .then(response => response.text())
-		  .then(result => console.log(result))
-		  .catch(error => console.log('error', error));
+	/jointrips
+	    # Adds a user onto a trip, and decrements the number of SeatsAvailable
+	    # Example: INSERT INTO take (uID, tID) VALUES (userID, tripID)
+	    # http://10.10.9.188:3000/jointrips
+	    # POST RequestDetails:
+		Headers:	"Content-Type", "application/json"
+		Body:		JSON.stringify({
+		  "uID": "userID",
+		  "tID": "tripID"
+		});
