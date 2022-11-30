@@ -1,68 +1,54 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 import styled from 'styled-components';
+import {newUID} from './Launch';
 
-const ExampleMessages = [
-  {
-    id: '1',
-    userName: 'Jenny Doe',
-    userImg: require('../images/user-3.jpg'),
-    messageTime: '4 mins ago',
-    messageText:
-      'Hello, this is a test message for FoxLift.',
-  },
-  {
-    id: '2',
-    userName: 'John Doe',
-    userImg: require('../images/user-1.jpg'),
-    messageTime: '2 hours ago',
-    messageText:
-      'Hey, this is a test message for FoxLift.',
-  },
-  {
-    id: '3',
-    userName: 'Ken William',
-    userImg: require('../images/user-4.jpg'),
-    messageTime: '1 hours ago',
-    messageText:
-      'Hey, this is a test message for FoxLift that takes up two lines.',
-  },
-  {
-    id: '4',
-    userName: 'Alex Smith',
-    userImg: require('../images/user-6.jpg'),
-    messageTime: '1 day ago',
-    messageText:
-      'Hey, this is a test message for FoxLift that takes up two lines.',
-  },
-  {
-    id: '5',
-    userName: 'Emma Johnson',
-    userImg: require('../images/user-7.jpg'),
-    messageTime: '2 days ago',
-    messageText:
-      'Hey, this is a test message for FoxLift that takes up two lines.',
-  },
-];
 
-const Messages = ({navigation}) => {
+
+
+function Messages ({navigation}) {
+
+  const [isLoading, setLoading] = useState(true);
+  const [messages, setMessages] = useState([]);
+
+  const formatDate = (dateString) => {
+		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
+		return new Date(dateString).toLocaleDateString(undefined, options)
+	  };	
+
+  //Query to messages table based on the user id
+  //Will return all of the message information, when user clicks on a certain message there will be another query
+  //To display only the message and the date
+    const getMessages = async () => {
+      try {
+      const response = await fetch('http://10.10.9.188:3000/getuserstomessage?uid' + newUID);
+      const json = await response.json();
+      setMessages(json);
+      } catch (error) {
+      console.error(error);
+      } finally {
+      setLoading(false);
+      }
+    };
+  
+    useEffect(() => {
+      getMessages();
+    }, []);
+
     return (
       <Container>
         <FlatList 
-          data={ExampleMessages}
+          data={messages}
           keyExtractor={item=>item.id}
           renderItem={({item}) => (
-            <Card onPress={() => navigation.navigate('Chat', {userName: item.userName})}>
+            <Card onPress={() => navigation.navigate('Chat', {userName: item.senderID})}>
               <UserInfo>
-                <UserImgWrapper>
-                  <UserImg source={item.userImg} />
-                </UserImgWrapper>
                 <TextSection>
                   <UserInfoText>
-                    <UserName>{item.userName}</UserName>
-                    <PostTime>{item.messageTime}</PostTime>
+                    <UserName>{item.senderID}</UserName>
+                    <PostTime>{formatDate(item.date)}</PostTime>
                   </UserInfoText>
-                  <MessageText>{item.messageText}</MessageText>
+                  <MessageText>{item.message}</MessageText>
                 </TextSection>
               </UserInfo>
             </Card>

@@ -3,10 +3,32 @@ import {View, ScrollView, Text, Button, StyleSheet} from 'react-native';
 import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {newUID} from './Launch';
 
+//May need to make this a Chat function instead of const
 const Chat = () => {
   const [messages, setMessages] = useState([]);
 
+  //Need specific query to fetch messages between current user and other users that are in the same ride
+  //Have the same tID in the take table
+  const getMessages = async () => {
+    try {
+    const response = await fetch('http://10.10.9.188:3000/getmessage');
+    const json = await response.json();
+    setMessages(json);
+    } catch (error) {
+    console.error(error);
+    } finally {
+    setLoading(false);
+    }
+  };
+
+  //Query will get messages for both users in message object
+  //In the user objects: Replace _id: 1 with the message.senderID and _id: 2 with message.recieverID
+  //Replace text with message.message
+  //Replace createdAt with message.date
+  //Will also need to get the user's account name based on their userID for the top of chat
+  //And add back button to go back to messages page
   useEffect(() => {
     setMessages([
       {
@@ -32,6 +54,7 @@ const Chat = () => {
     ]);
   }, []);
 
+  //Add post query in this function to add each message to the database
   const onSend = useCallback((messages = []) => {
     setMessages((previousMessages) =>
       GiftedChat.append(previousMessages, messages),

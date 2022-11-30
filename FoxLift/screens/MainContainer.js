@@ -7,7 +7,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Launch from "./Launch";
 import Home from "./Home";
-import Activity, { PastRides, UpcomingRides } from "./Activity";
+import Activity, { PastRides, UpcomingRides, UserRides } from "./Activity";
 import Messages from "./Messages";
 import Chat from "./Chat";
 import Profile, {AccountInformation, Settings, TermsConditions} from "./Profile";
@@ -39,6 +39,7 @@ const ActivityStackScreen = () => (
             <ActivityStack.Screen name = "Activity2" component = {Activity} options={{ headerShown: false }}/>
             <ActivityStack.Screen name = "Upcoming Trip Requests" component = {UpcomingRides} />
             <ActivityStack.Screen name = "Past Trip Requests" component = {PastRides} />
+            <ActivityStack.Screen name = "Your Trip Requests" component = {UserRides} />
         </ActivityStack.Navigator>
 )
 

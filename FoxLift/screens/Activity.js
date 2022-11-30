@@ -10,10 +10,12 @@ import {
   SafeAreaView,
   Switch,
   FlatList,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
+import {newUID} from './Launch';
 
 function Activity({ navigation }) {
 
@@ -24,6 +26,10 @@ function Activity({ navigation }) {
 
 	const toPast = () => {
 		navigation.navigate('Past Trip Requests');
+	}
+
+	const toUserSpecific = () => {
+		navigation.navigate('Your Trip Requests');
 	}
 	return (
 		<SafeAreaView>
@@ -46,6 +52,16 @@ function Activity({ navigation }) {
 					</View>
 				</View>	
 			</TouchableOpacity>
+
+			<TouchableOpacity onPress={toUserSpecific}>
+				<View style = {stylesheet.styleWrapButtonCopy1}>
+					<View style = {stylesheet.styleButtonCopy1}>
+						<Text style = {stylesheet.styleText}>
+							{`Your Trips`}
+						</Text>
+					</View>
+				</View>	
+			</TouchableOpacity>
 		</SafeAreaView>
 	)
 }
@@ -61,7 +77,7 @@ export function UpcomingRides({ navigation }) {
 
 	  const getTrips = async () => {
 		try {
-		 const response = await fetch('http://10.10.9.188:3000/gettrips?isCancelled=0&isCompleted=0');
+		 const response = await fetch('http://10.10.9.188:3000/getopentrips?uid=' + newUID);
 		 const json = await response.json();
 		 setData(json);
 	   } catch (error) {
@@ -72,9 +88,39 @@ export function UpcomingRides({ navigation }) {
 	 }
 
 	 const formatDate = (dateString) => {
-		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
+		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
 		return new Date(dateString).toLocaleDateString(undefined, options)
-	  }	  
+	  }	
+
+	const handlePress = (data) => {
+		//On confirm, add the user to the take table where they will have the same tID as the other user in the trip
+		//Then the database is queried to get the users that have the same tID and put in a chat together
+		Alert.alert('Confirm Rideshare', 'Do you want to be added to this ride?', [
+			{
+			  text: 'Cancel', onPress: () => console.log('Cancel') },
+			{ text: 'Confirm', onPress: () => addToRideShare(data.tID) },
+		  ]);
+		  console.log(data.startLocation + " " + data.destination + " " + data.time + " " + data.type + " " + data.tID);
+		
+	}
+
+	const addToRideShare = (tID) => {
+		fetch("http://10.10.9.188:3000/jointrips",{
+        method:"post",
+        header:{
+          Accept:"application/json",
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({
+          uID: newUID.toString(),
+		  tID: tID.toString(),
+        }),
+      }).then((res)=>{
+        if(res.ok){
+          console.log("User added to existing trip.");
+        }
+      })
+	}
    
 	 useEffect(() => {
 	   getTrips();
@@ -91,7 +137,7 @@ export function UpcomingRides({ navigation }) {
           data={data}
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handlePress(item)}>
 				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
 			</TouchableOpacity>
           )}
@@ -142,9 +188,7 @@ export function PastRides({ navigation }) {
           data={data}
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
-            <TouchableOpacity>
-				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
-			</TouchableOpacity>
+			<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
           )}
         />
 		)}
@@ -152,6 +196,71 @@ export function PastRides({ navigation }) {
 	)
 }
 
+export function UserRides({ navigation }) {
+
+	const [isLoading, setLoading] = useState(true);
+	const [data, setData] = useState([]);
+
+	const backToActivity = () => {
+		navigation.navigate('Activity');
+	}
+
+	const formatDate = (dateString) => {
+		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
+		return new Date(dateString).toLocaleDateString(undefined, options)
+	}
+
+	const handlePress = (data) => {
+		//On cancel ride, post query to the database to update the existing ride and make cancelled true
+		Alert.alert('Cancel Rideshare', 'Do you want to cancel this existing ride?', [
+			{
+			  text: 'Close', onPress: () => console.log('Close') },
+			{ text: 'Cancel Ride', onPress: () => console.log('Cancel Ride') },
+		  ]);
+		 
+		
+	}
+
+	//getusertrips endpoint for user specific rides
+	const getUserTrips = async () => {
+		try {
+		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uid' + newUID);
+		 const json = await response.json();
+		 setData(json);
+	   } catch (error) {
+		 console.error(error);
+	   } finally {
+		 setLoading(false);
+	   }
+	}
+
+	useEffect(() => {
+		getUserTrips();
+	  }, []);
+
+	  
+	  return (
+		<View style={{ flex: 1, padding: 24 }}>
+			<Button title='Done'
+		onPress={backToActivity}
+		/>
+
+		{isLoading ? <ActivityIndicator/> : (
+		<FlatList
+          data={data}
+          keyExtractor={({ tID }, index) => tID}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handlePress(item)}>
+				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
+			</TouchableOpacity>
+          )}
+        />
+		)}
+		</View>
+	)
+	  
+	
+}
 const stylesheet = StyleSheet.create({
 
 	styleText: {
@@ -275,35 +384,7 @@ const stylesheet = StyleSheet.create({
 	 borderWidth: 1,
 	 padding: 10
  },
- 
- 
- styleProfileIcon: {
-	 position: "absolute",
-	 top: 750,
-	 right: 0,
- 
- },
- 
- styleActivityIcon: {
-	 position: "absolute",
-	 top: 750,
-	 left: 50,
- 
- },
- 
- styleHomeIcon: {
-	 position: "absolute",
-	 top: 750,
-	 left: 0,
- 
- },
- 
- styleMessagesIcon: {
-	 position: "absolute",
-	 top: 750,
-	 right: 50,
- 
- },
+
  
  
  })
