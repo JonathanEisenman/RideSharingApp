@@ -287,7 +287,10 @@ useEffect(()=>{
                 onPlaceSelected(data, details, "destination")
               }}/>
 
-              <Button title="Select Date for Ride" onPress={showDatePicker} />
+              
+              <TouchableOpacity style = {stylesheet.button} onPress = {showDatePicker}> 
+                <Text style = {stylesheet.buttonText}> Select Date for Ride</Text>
+              </TouchableOpacity>
 
               <TouchableOpacity style = {stylesheet.button} onPress = {traceRoute}> 
                 <Text style = {stylesheet.buttonText}> Trace Route</Text>
@@ -333,14 +336,15 @@ useEffect(()=>{
   },
 
   map:{
-    height: 770,
+    top: 365,
+    height: 400,
     marginVertical: 0,
     width:SCREEN_WIDTH,
   },
 
   search: {
     position: "absolute",
-    width: "90%",
+    width: "100%",
     backgroundColor: "white",
     shadowColow: "black",
     shadowOffset: {width: 2, height: 2},
@@ -349,7 +353,7 @@ useEffect(()=>{
     elevation: 4,
     padding: 8,
     borderRadius: 8,
-    top: 10,
+    top: 0,
   },
 
   input: {
