@@ -60,7 +60,7 @@ export default function MainContainer(){
         
         <NavigationContainer>
             <Tab.Navigator
-            initialRouteName={homeName}
+            initialRouteName={launchName}
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused, color, size}) => {
                     let iconName;
@@ -77,6 +77,9 @@ export default function MainContainer(){
                     }
                     else if (routeName === profileName) {
                         iconName = focused ? 'account' : 'account-outline'
+                    }
+                    else if (routeName === launchName) {
+                        iconName = focused ? 'rocket-launch' : 'rocket-launch-outline'
                     }
 
                     return <MaterialCommunityIcons name={iconName} size={size} color={color} />
@@ -101,13 +104,13 @@ export default function MainContainer(){
 
 
 
-
+                <Tab.Screen name={launchName} component={Launch} />
                 <Tab.Screen name={homeName} component={Home} options={{ headerShown: false }}/>
                 <Tab.Screen name={activityName} component={ActivityStackScreen} />
                 <Tab.Screen name={messagesName} component={Messages} />
                 <Tab.Screen name={profileName} component={ProfileStackScreen} />
                 <Tab.Screen name="Chat" component={Chat} />
-                <Tab.Screen name={launchName} component={Launch} />
+                
                 
 
                 

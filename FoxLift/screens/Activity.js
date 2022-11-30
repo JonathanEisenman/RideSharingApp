@@ -79,8 +79,8 @@ export function UpcomingRides({ navigation }) {
 		const [userRole, setUserRole] = useState({});
   
 		const formatDate = (dateString) => {
-			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
-			return new Date(dateString).toLocaleDateString(undefined, options)
+			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
+			return new Date(dateString).toLocaleDateString(undefined, options);
 		  }	  
 	
 		  const showDatePickerMin = () => {
@@ -222,10 +222,12 @@ export function UpcomingRides({ navigation }) {
 <TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMin}>
 			<Text style = {stylesheet.buttonText}> Select Minimum Time </Text>
         </TouchableOpacity>	 
+		<Text> Minimum Time: {dateMin} </Text>
 
 		<TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMax}>
 			<Text style = {stylesheet.buttonText}> Select Maximum Time </Text>
-        </TouchableOpacity>	
+        </TouchableOpacity>
+		<Text> Maximum Time: {dateMax} </Text>
 
 		<DateTimePickerModal
               isVisible={isDatePickerVisibleMin}
@@ -240,7 +242,6 @@ export function UpcomingRides({ navigation }) {
               onCancel={hideDatePickerMax}
             />	
 
-		<Text>Current Filter: Destination: {value} Minimum Time: {dateMin} Maximum Time: {dateMax}</Text>
 
 		<TouchableOpacity style = {stylesheet.button} onPress = {filteredTripsDestination}> 
                 <Text style = {stylesheet.buttonText}> Filter </Text>
@@ -297,9 +298,6 @@ export function PastRides({ navigation }) {
 
 	return (
 		<SafeAreaView>
-			<Button title='Done'
-		onPress={backToActivity}
-		/>
 		{isLoading ? <ActivityIndicator/> : (
 		<FlatList
           data={data}
@@ -328,20 +326,48 @@ export function UserRides({ navigation }) {
 	}
 
 	const handlePress = (data) => {
-		//On cancel ride, post query to the database to update the existing ride and make cancelled true
+		//On cancel ride, put query to the database to update the existing ride and make cancelled true
+		//On confirm ride, put query to the database to update existing ride and make completed true
 		Alert.alert('Cancel Rideshare', 'Do you want to cancel this existing ride?', [
-			{
-			  text: 'Close', onPress: () => console.log('Close') },
-			{ text: 'Cancel Ride', onPress: () => console.log('Cancel Ride') },
-		  ]);
-		 
+			{ text: 'Close', onPress: () => console.log('Close') },
+			{ text: 'Complete Ride', onPress: () => completeRide(data.tID)},  
+			{ text: 'Cancel Ride', onPress: () => cancelRide(data.tID)},
+		  ]); 
 		
+	}
+
+	const completeRide = (tID) => {
+		fetch("http://10.10.9.188:3000/updatetrips?isCompleted&tID=" + tID,{
+        method:"put",
+        header:{
+          Accept:"application/json",
+          "Content-Type":"application/json",
+        },
+      }).then((res)=>{
+        if(res.ok){
+          console.log("User completed ride.");
+        }
+      })
+	}
+
+	const cancelRide = (tID) => {
+		fetch("http://10.10.9.188:3000/updatetrips?isCancelled&tID=" + tID,{
+        method:"put",
+        header:{
+          Accept:"application/json",
+          "Content-Type":"application/json",
+        },
+      }).then((res)=>{
+        if(res.ok){
+          console.log("User cancelled ride.");
+        }
+      })
 	}
 
 	//getusertrips endpoint for user specific rides
 	const getUserTrips = async () => {
 		try {
-		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uid' + newUID);
+		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uid=' + newUID);
 		 const json = await response.json();
 		 setData(json);
 	   } catch (error) {
@@ -358,9 +384,7 @@ export function UserRides({ navigation }) {
 	  
 	  return (
 		<View style={{ flex: 1, padding: 24 }}>
-			<Button title='Done'
-		onPress={backToActivity}
-		/>
+
 
 		{isLoading ? <ActivityIndicator/> : (
 		<FlatList

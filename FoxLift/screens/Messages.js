@@ -21,7 +21,7 @@ function Messages ({navigation}) {
   //To display only the message and the date
     const getMessages = async () => {
       try {
-      const response = await fetch('http://10.10.9.188:3000/getuserstomessage?uid' + newUID);
+      const response = await fetch('http://10.10.9.188:3000/getuserstomessage?uid=' + newUID);
       const json = await response.json();
       setMessages(json);
       } catch (error) {
