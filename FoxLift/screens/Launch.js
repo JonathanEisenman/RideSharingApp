@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import reactDom from 'react-dom';
 import {
   StyleSheet,
@@ -27,9 +27,11 @@ WebBrowser.maybeCompleteAuthSession();
 
 /*
 	TODO: 
-	Need to pass around insertID.
-	To do this we can make a new fetch to getusers where email = userInfo.email then store the insertID to a variable.
-	('http://10.10.9.188:3000/getusers?email=' + userInfo.email)
+	Chat and Messages functionality: For specifically the current user.
+	(DONE) Filtering upcoming trips by time range.
+	Adding favorite destinations: Google autocomplete api viewable and addable by Profile screen.
+	Activity Page History: Show specifically the currents user's rides. Touchable opacity: complete ride or cancel ride.
+	Fix up the weird bugs on launch (double alert message, )
 */
 
 var newUID = 0;
@@ -68,6 +70,18 @@ function Launch({ navigation }) {
 		  setAccessToken(response.authentication.accessToken);
 		}
 	  }, [response]);
+
+	React.useEffect(() => {
+		if (emailDupe == false)
+		{
+		if (userInfo)
+		{ 
+			//doesEmailExist();
+			postUser();
+			getCurrUser();
+		}
+		}
+	  }, []);  
 	
 	  async function getUserData() {
 		let userInfoResponse = await fetch("https://www.googleapis.com/userinfo/v2/me", {
@@ -76,31 +90,44 @@ function Launch({ navigation }) {
 	
 		userInfoResponse.json().then(data => {
 		  setUserInfo(data);
+		  //doesEmailExist();
 		});
 	  }
 
-	  const doesEmailExist = async()=>{
-		//if (emailDupe == false){
-		if (userInfo){
-			const response = await fetch('http://10.10.9.188:3000/getusers?email=' + userInfo.email);
-		 	const json = await response.json();
-          	setData(json[0].email);
-		  	if (data == userInfo.email)
-			{
-				console.log(data);
-				emailDupe = true;
-			}
-			else{}
-			//isIdSet = true;
-      	}
+	//   const doesEmailExist = async()=>{
+	// 	if (emailDupe == false){
+	// 	if (userInfo){
+	// 		const response = await fetch('http://10.10.9.188:3000/getusers?email=' + userInfo.email);
+	// 	 	const json = await response.json();
+	// 		if (json[0].email !== userInfo.email)
+	// 		{
+	// 			// that email already exists
+	// 			emailDupe = true;
+	// 			getCurrUser();
+	// 		}
+	// 		else
+	// 		{
+    //       		// setData(json[0].email);
+	// 			// console.log(data);
+	// 	  		// if (data == userInfo.email)
+	// 			// {
+	// 			// 	emailDupe = true;
+	// 			// }
+	// 			// else{
+	// 			// 	emailDupe = false;
+	// 			// }
+	// 			emailDupe = false;
+	// 			postUser();
+	// 		}
+    //   	}
+	// }
 	//}
-	}
 		
 
 	  const postUser = async()=>{
 		if (emailDupe == false){
 		if (userInfo){
-		const randomName = uniqueNamesGenerator({ dictionaries: [colors, animals] }); // big_red_donkey
+		const randomName = uniqueNamesGenerator({ dictionaries: [colors, animals] }); // red_donkey for example
 		fetch("http://10.10.9.188:3000/postusers",{
 		  method:"post",
 		  header:{
@@ -121,6 +148,8 @@ function Launch({ navigation }) {
 		  
 		})
 	  }}
+	  else{}
+	  //getCurrUrser();
 	}
 
 	  const getCurrUser = async()=>{
@@ -135,33 +164,36 @@ function Launch({ navigation }) {
       	}
 		  isIdSet = true;
 	}
+			navigation.navigate('Home');
+			//alert('Welcome' + ' ' + userInfo.email);
 		}
 		
 
 
 	  const showUserInfo = () => {
 		if (userInfo) {
-			if(isIdSet == false){
-			{doesEmailExist()}
-			if (emailDupe == false)
-			{
-				{postUser()};
-			}
-			{getCurrUser()};
-			//console.log(newUID);
-			// return (
-			// 	<View>
-			// 	  <Image source={{uri: userInfo.picture}} style={stylesheet.profilePic} />
-			// 	  <Text>Welcome {userInfo.name}</Text>
-			// 	  <Text>{userInfo.email}</Text>
-			// 	</View>
-			//   );
-			navigation.navigate({
-				name: 'Home',
-			});
-			alert('Welcome' + ' ' + userInfo.email);
+		postUser();
+		getCurrUser();
+		// 	if(isIdSet == false){
+		// 	//doesEmailExist();
+		// 	//getCurrUser();	
+		// 	//if (emailDupe == false)
+		// 	//{
+		// 		//postUser();
+		// 	//}
+		// 	//else{}
+		// 	//console.log(newUID);
+		// 	// return (
+		// 	// 	<View>
+		// 	// 	  <Image source={{uri: userInfo.picture}} style={stylesheet.profilePic} />
+		// 	// 	  <Text>Welcome {userInfo.name}</Text>
+		// 	// 	  <Text>{userInfo.email}</Text>
+		// 	// 	</View>
+		// 	//   );
+		// 	// navigation.navigate('Home');
+		// 	// alert('Welcome' + ' ' + userInfo.email);
 			
-		}
+		// }
 		}
 		else{
 			return(
