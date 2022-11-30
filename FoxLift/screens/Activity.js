@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import {newUID} from './Launch';
 
 function Activity({ navigation }) {
@@ -70,6 +71,63 @@ export function UpcomingRides({ navigation }) {
 
 	const [isLoading, setLoading] = useState(true);
   	const [data, setData] = useState([]);
+	  const [value, onChangeText] = React.useState('');
+	  const [isDatePickerVisibleMin, setDatePickerVisibilityMin] = useState(false);
+	  const [isDatePickerVisibleMax, setDatePickerVisibilityMax] = useState(false);
+		const [dateMin, setDateMin] = useState();
+	  const [dateMax, setDateMax] = useState();
+		const [userRole, setUserRole] = useState({});
+  
+		const formatDate = (dateString) => {
+			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
+			return new Date(dateString).toLocaleDateString(undefined, options)
+		  }	  
+	
+		  const showDatePickerMin = () => {
+			setDatePickerVisibilityMin(true);
+		  };
+	
+		  const hideDatePickerMin = () => {
+			setDatePickerVisibilityMin(false);
+		  };
+	
+		  const showDatePickerMax = () => {
+			setDatePickerVisibilityMax(true);
+		  };
+	
+		  const hideDatePickerMax = () => {
+			setDatePickerVisibilityMax(false);
+		  };
+	
+		  const formatDateMin = (dateMin) => {
+			dateMin = dateMin.toISOString().replace('T',' ').replace('Z','');
+			return dateMin;
+		  };
+	
+		  const formatDateMax = (dateMax) => {
+			dateMax = dateMax.toISOString().replace('T',' ').replace('Z','');
+			return dateMax;
+		  };
+	
+		const handleConfirmMin = (dateMin) => {
+			dateMin = formatDateMin(dateMin);
+			console.log("A date has been picked: ", dateMin);    
+			setDateMin(dateMin);
+			hideDatePickerMin();
+		};
+	
+		const handleConfirmMax = (dateMax) => {
+			dateMax = formatDateMax(dateMax);
+			console.log("A date has been picked: ", dateMax);    
+			setDateMax(dateMax);
+			hideDatePickerMax();
+		};
+		  
+		
+	
+		const initFetchStr = 'http://10.10.9.188:3000/gettrips?isCancelled=0&isCompleted=0';
+		var fetchStr = initFetchStr;
+		var tempFetchStr = fetchStr;
 
 	const backToActivity = () => {
 		navigation.navigate('Activity');
@@ -77,7 +135,7 @@ export function UpcomingRides({ navigation }) {
 
 	  const getTrips = async () => {
 		try {
-		 const response = await fetch('http://10.10.9.188:3000/getopentrips?uid=' + newUID);
+		 const response = await fetch(fetchStr);
 		 const json = await response.json();
 		 setData(json);
 	   } catch (error) {
@@ -87,10 +145,36 @@ export function UpcomingRides({ navigation }) {
 	   }
 	 }
 
-	 const formatDate = (dateString) => {
-		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
-		return new Date(dateString).toLocaleDateString(undefined, options)
-	  }	
+	  const filteredTripsDestination = () => {
+		if (value != '')
+		{
+			fetchStr = fetchStr + '&destination=' + value;
+		}
+		filteredTripsTime();
+	 }
+
+	 const filteredTripsTime = () => {
+		if (dateMin)
+		{
+			fetchStr = fetchStr + '&time>=' + dateMin;
+		}
+		if (dateMax)
+		{
+			fetchStr = fetchStr + '&time<=' + dateMax;
+		}
+		getTrips();
+		// Set the fetch string back to initial string so that it can be modified again.
+		fetchStr = initFetchStr;
+		
+	 }
+
+	 const resetFilters = () => {
+			fetchStr = initFetchStr;
+			onChangeText('');
+			setDateMax();
+			setDateMin();
+			getTrips();
+	 }
 
 	const handlePress = (data) => {
 		//On confirm, add the user to the take table where they will have the same tID as the other user in the trip
@@ -128,9 +212,42 @@ export function UpcomingRides({ navigation }) {
 
 	return (
 		<View style={{ flex: 1, padding: 24 }}>
-			<Button title='Done'
-		onPress={backToActivity}
-		/>
+			<TextInput style = {stylesheet.input}
+               placeholder = "Location"
+               placeholderTextColor = "#9a73ef"
+               onChangeText = {text => onChangeText(text)}
+			   value={value}
+			   />
+
+<TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMin}>
+			<Text style = {stylesheet.buttonText}> Select Minimum Time </Text>
+        </TouchableOpacity>	 
+
+		<TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMax}>
+			<Text style = {stylesheet.buttonText}> Select Maximum Time </Text>
+        </TouchableOpacity>	
+
+		<DateTimePickerModal
+              isVisible={isDatePickerVisibleMin}
+              mode="datetime"
+              onConfirm={handleConfirmMin}
+              onCancel={hideDatePickerMin}
+            />
+		<DateTimePickerModal
+              isVisible={isDatePickerVisibleMax}
+              mode="datetime"
+              onConfirm={handleConfirmMax}
+              onCancel={hideDatePickerMax}
+            />	
+
+		<Text>Current Filter: Destination: {value} Minimum Time: {dateMin} Maximum Time: {dateMax}</Text>
+
+		<TouchableOpacity style = {stylesheet.button} onPress = {filteredTripsDestination}> 
+                <Text style = {stylesheet.buttonText}> Filter </Text>
+        </TouchableOpacity>	
+		<TouchableOpacity style = {stylesheet.button} onPress = {resetFilters}> 
+                <Text style = {stylesheet.buttonText}> Reset Filter </Text>
+        </TouchableOpacity>	
 
 		{isLoading ? <ActivityIndicator/> : (
 		<FlatList
@@ -384,6 +501,20 @@ const stylesheet = StyleSheet.create({
 	 borderWidth: 1,
 	 padding: 10
  },
+
+ input: {
+	margin: 15,
+	height: 40,
+	borderColor: '#7a42f4',
+	borderWidth: 1
+ },
+
+ button: {
+    backgroundColor: "gray",
+    paddingVertical: 12,
+    marginTop: 16,
+    borderRadius: 4,
+  },
 
  
  
