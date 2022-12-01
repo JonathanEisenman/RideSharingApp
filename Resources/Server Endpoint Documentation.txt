@@ -38,6 +38,11 @@ GET Endpoints:
 	    # Example: SELECT * FROM users WHERE uID IN (SELECT uID FROM take WHERE tID IN (SELECT tID FROM take WHERE uID=1))
 	    # http://10.10.9.188:3000/getuserstomessage?uID=1
 
+	/getmessagesbetweenusers
+	    # Takes parameters "uID1" and "uID2", returns all messages between those users sorted oldest to newest
+	    # Example: SELECT * FROM message WHERE (senderID=1 AND receiverID=5) OR (senderID=5 AND receiverID=1) ORDER BY time ASC
+	    # http://10.10.9.188:3000/getmessagesbetweenusers?uID1=1&uID2=5
+
 	/gettripsrange
 	    # Takes parameters "min" and "max", only returns non-completed and non-cancelled trips
 	    # Example: SELECT * FROM trips WHERE time >= MIN_TIMESTAMP AND time <= MAX_TIMESTAMP AND isCompleted=0 AND isCancelled=0 ORDER BY time ASC
