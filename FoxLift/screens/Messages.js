@@ -1,15 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import {newUID} from './Launch';
 
+export {chatUID};
 
 
+var chatUID = 0;
 
 function Messages ({navigation}) {
 
   const [isLoading, setLoading] = useState(true);
   const [messages, setMessages] = useState([]);
+  const [friendUid, setUid] = useState();
 
   const formatDate = (dateString) => {
 		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
@@ -21,7 +24,7 @@ function Messages ({navigation}) {
   //To display only the message and the date
     const getMessages = async () => {
       try {
-      const response = await fetch('http://10.10.9.188:3000/getuserstomessage?uid=' + newUID);
+      const response = await fetch('http://10.10.9.188:3000/getuserstomessage?uID=' + newUID);
       const json = await response.json();
       setMessages(json);
       } catch (error) {
@@ -35,23 +38,27 @@ function Messages ({navigation}) {
       getMessages();
     }, []);
 
+
+    const chatWithUser = (connectedUser) => {
+
+      setUid(connectedUser.uID);
+      chatUID = friendUid;
+      console.log("friend: " + friendUid);
+      console.log(chatUID);
+      navigation.navigate('Chat');
+    }
+
     return (
       <Container>
         <FlatList 
           data={messages}
-          keyExtractor={item=>item.id}
+          keyExtractor={({ uID }, index) => uID}
           renderItem={({item}) => (
-            <Card onPress={() => navigation.navigate('Chat', {userName: item.senderID})}>
-              <UserInfo>
-                <TextSection>
-                  <UserInfoText>
-                    <UserName>{item.senderID}</UserName>
-                    <PostTime>{formatDate(item.date)}</PostTime>
-                  </UserInfoText>
-                  <MessageText>{item.message}</MessageText>
-                </TextSection>
-              </UserInfo>
-            </Card>
+            <TouchableOpacity onPress={() => chatWithUser(item)}>
+				    <Text style = {styles.textTrips}>
+                {item.accountName}
+            </Text>
+			      </TouchableOpacity>
           )}
         />
       </Container>
@@ -66,6 +73,13 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'center'
   },
+  textTrips: {
+    borderWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    fontSize: 32,
+    
+    }
 });
 
 const Container = styled.View`

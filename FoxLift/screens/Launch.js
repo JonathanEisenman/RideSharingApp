@@ -200,12 +200,12 @@ function Launch({ navigation }) {
 		// 	// alert('Welcome' + ' ' + userInfo.email);
 		// }
 		return(
-			<View>
-				<Text style = {stylesheet.styleText}>Welcome {userInfo.email}!</Text>
+			<SafeAreaView>
 				<Button title='Start Ridesharing!'
 					onPress={onPressHandler}
 				/>
-			</View>
+				<Text>Welcome {userInfo.email}!</Text>
+			</SafeAreaView>
 		)
 		}
 		else{
