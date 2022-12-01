@@ -10,7 +10,7 @@ import Home from "./Home";
 import Activity, { PastRides, UpcomingRides, UserRides } from "./Activity";
 import Messages from "./Messages";
 import Chat from "./Chat";
-import Profile, {AccountInformation, Settings, TermsConditions} from "./Profile";
+import Profile, {Settings, TermsConditions, Favorites} from "./Profile";
 
 
 //Screen names
@@ -29,8 +29,8 @@ const ProfileStackScreen = () => (
         <ProfileStack.Navigator>
             <ProfileStack.Screen name = "Profile2" component = {Profile} options={{ headerShown: false }}/>
             <ProfileStack.Screen name = "Settings" component = {Settings} />
-            <ProfileStack.Screen name = "Account Information" component = {AccountInformation} />
             <ProfileStack.Screen name = "Terms and Conditions" component = {TermsConditions} />
+            <ProfileStack.Screen name = "Favorites" component = {Favorites} />
         </ProfileStack.Navigator>
 )
 

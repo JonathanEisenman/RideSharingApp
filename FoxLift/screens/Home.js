@@ -56,6 +56,7 @@ function InputAutoComplete({
       <GooglePlacesAutocomplete
         styles={{textInput: stylesheet.input}}
         placeholder= {placeholder}
+        keyboardShouldPersistTaps='always'
         fetchDetails = {true}
         onPress={(data, details = null) => {
        // 'details' is provided when fetchDetails = true
@@ -167,6 +168,12 @@ function Home({ navigation }) {
         setDistance(args.distance);
         setDuration(args.duration);
       }
+    }
+
+    const addToFavorites = (destination) => {
+      if (destination) {
+        console.log("A new favorite has been added: ", destination);
+      }      
     }
 
     const createRideShare = () =>  {
@@ -295,14 +302,18 @@ useEffect(()=>{
 
               {distance && duration ? (
               <View> 
-                <Text> Distance: {distance.toFixed(2)} miles </Text>
-                <Text> Duration: {Math.ceil(duration)} min </Text>
+                <Text style = {stylesheet.distanceText}> Distance: {distance.toFixed(2)} miles </Text>
+                <Text style = {stylesheet.durationText}> Duration: {Math.ceil(duration)} min </Text>
               </View>
               ): null}
 
             <TouchableOpacity style = {stylesheet.button} onPress = { () => {createRideShare()}}>
                 <Text style = {stylesheet.buttonText}> Confirm Ride</Text>
             </TouchableOpacity>      
+
+            <TouchableOpacity style = {stylesheet.button} onPress = { () => {addToFavorites(destinationName)}}>
+                <Text style = {stylesheet.buttonText}> Add Destination To Favorites</Text>
+            </TouchableOpacity> 
 
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -366,8 +377,16 @@ useEffect(()=>{
 
   buttonText: {
     textAlign: "center",
-  }
+  },
 
+  distanceText: {
+    paddingTop: 20,
+    textAlign: "center",
+  },
+
+  durationText: {
+    textAlign: "center",
+  }
 
 })
 
