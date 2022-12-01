@@ -16,7 +16,10 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {newUID} from './Launch';
+
+const GOOGLE_MAPS_API_KEY = "AIzaSyBVzXhTkavu5eAiixabE7GYvGpg8X2WPOU";
 
 function Activity({ navigation }) {
 
@@ -212,12 +215,23 @@ export function UpcomingRides({ navigation }) {
 
 	return (
 		<View style={{ flex: 1, padding: 24 }}>
-			<TextInput style = {stylesheet.input}
-               placeholder = "Location"
-               placeholderTextColor = "#9a73ef"
-               onChangeText = {text => onChangeText(text)}
-			   value={value}
-			   />
+		<GooglePlacesAutocomplete
+		  styles={{textInput: stylesheet.input2}}
+		  
+		  fetchDetails = {true}
+		  onPress={(data, details = null) => {
+		 // 'details' is provided when fetchDetails = true
+		  onChangeText(data.description);
+		  //console.log(data);
+		  }}
+		  onFail={error => console.error(error)}
+		  query={{
+		  key: GOOGLE_MAPS_API_KEY, 
+		  language: 'en',
+		  components: "country:us"
+		  }}
+		/>
+
 
 <TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMin}>
 			<Text style = {stylesheet.buttonText}> Select Minimum Time </Text>
@@ -330,10 +344,10 @@ export function UserRides({ navigation }) {
 	const handlePress = (data) => {
 		//On cancel ride, put query to the database to update the existing ride and make cancelled true
 		//On confirm ride, put query to the database to update existing ride and make completed true
-		Alert.alert('Cancel Rideshare', 'Do you want to cancel this existing ride?', [
-			{ text: 'Close', onPress: () => console.log('Close') },
-			{ text: 'Complete Ride', onPress: () => completeRide(data.tID)},  
+		Alert.alert('Your Rideshare Options', 'What do you want to do with this ride?', [
+			{ text: 'Complete Ride', onPress: () => completeRide(data.tID)}, 
 			{ text: 'Cancel Ride', onPress: () => cancelRide(data.tID)},
+			{ text: 'Close', onPress: () => console.log('Close') },
 		  ]); 
 		
 	}
@@ -546,7 +560,11 @@ const stylesheet = StyleSheet.create({
 	paddingTop: 10,
 	paddingBottom: 10,
 	
-  }
+  },
+  input2: {
+    borderColor: "black",
+    borderWidth: 1,
+  },
 
  
  
