@@ -50,10 +50,10 @@ function Chat({ navigation }) {
     );
 	  };	
 
-    // const formatDate2 = (date) => {
-		// 	date = date.toISOString().replace('T',' ').replace('Z','');
-    // return date;
-		//   }	  
+    const formatDate2 = (date) => {
+			date = date.replace('T',' ').replace('Z','');
+    return date;
+		  }	  
 
   const sendMessage = (messageText) => {
 		fetch("http://10.10.9.188:3000/postmessage",{
@@ -72,6 +72,7 @@ function Chat({ navigation }) {
         if(res.ok){
           console.log("New message created: " + messageText);
           getMessages();
+          onChangeText('');
         }
       })
 	}
@@ -83,6 +84,7 @@ function Chat({ navigation }) {
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
+      <View style = {{ flexDirection:'row' }}>
       <TextInput style = {stylesheet.input}
                placeholder = ""
                placeholderTextColor = "#9a73ef"
@@ -91,8 +93,14 @@ function Chat({ navigation }) {
 			   />
 
 <TouchableOpacity onPress = {() => sendMessage(value)}> 
-                <Text> Send </Text>
+          <MaterialCommunityIcons
+            name="send-circle"
+            style={{marginTop: 2, marginLeft: 5}}
+            size={38}
+            color="#2e64e5"
+          />
       </TouchableOpacity>	
+      </View>
 
       {isLoading ? <ActivityIndicator/> : (
 		<FlatList
@@ -100,7 +108,7 @@ function Chat({ navigation }) {
           keyExtractor={({ messageID }, index) => messageID}
           renderItem={({ item }) => (
 				<Text style = {stylesheet.textTrips}>
-					{"Message: " + item.message + '\n TimeStamp:' +  item.time}
+					{"Message: " + item.message + '\nTimeStamp: ' +  formatDate2(item.time)}
 				</Text>
           )}
         />
@@ -150,12 +158,12 @@ function Chat({ navigation }) {
   //   return (
   //     <Send {...props}>
   //       <View>
-  //         <MaterialCommunityIcons
-  //           name="send-circle"
-  //           style={{marginBottom: 5, marginRight: 5}}
-  //           size={32}
-  //           color="#2e64e5"
-  //         />
+          // <MaterialCommunityIcons
+          //   name="send-circle"
+          //   style={{marginBottom: 5, marginRight: 5}}
+          //   size={32}
+          //   color="#2e64e5"
+          // />
   //       </View>
   //     </Send>
   //   );
@@ -225,6 +233,7 @@ const stylesheet = StyleSheet.create({
     input: {
       height: 40,
       borderColor: '#7a42f4',
-      borderWidth: 1
+      borderWidth: 1,
+      width: "90%",
      },
 });
