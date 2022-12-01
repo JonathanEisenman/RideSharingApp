@@ -28,10 +28,13 @@ WebBrowser.maybeCompleteAuthSession();
 /*
 	TODO: 
 	Chat and Messages functionality: For specifically the current user.
+	(Message now displays account names you currently have trips in common with)
+	(Chat needs more work. Getting messages, and a text input that also posts messages, I can use a timeout to refresh the get every 5 seconds.)
 	(DONE) Filtering upcoming trips by time range.
-	Adding favorite destinations: Google autocomplete api viewable and addable by Profile screen.
-	Activity Page History: Show specifically the currents user's rides. Touchable opacity: complete ride or cancel ride.
-	Fix up the weird bugs on launch (double alert message, )
+	Adding favorite destinations: Google autocomplete api viewable and addable by Profile screen. (post in home, get in profile)
+	(DONE) Activity Page History: Show specifically the currents user's rides. Touchable opacity: complete ride or cancel ride.
+	(DONE) Fix up the weird bugs on launch (double alert message)
+	(I think ok) Google places autocomplete weird bug
 */
 
 var newUID = 0;
@@ -78,7 +81,7 @@ function Launch({ navigation }) {
 		{ 
 			//doesEmailExist();
 			postUser();
-			getCurrUser();
+			//getCurrUser();
 		}
 		}
 	  }, []);  
@@ -164,10 +167,13 @@ function Launch({ navigation }) {
       	}
 		  isIdSet = true;
 	}
-			navigation.navigate('Home');
+			//navigation.navigate('Home');
 			//alert('Welcome' + ' ' + userInfo.email);
 		}
 		
+		const onPressHandler = () => {
+			navigation.navigate('Home');
+		  }
 
 
 	  const showUserInfo = () => {
@@ -192,8 +198,15 @@ function Launch({ navigation }) {
 		// 	//   );
 		// 	// navigation.navigate('Home');
 		// 	// alert('Welcome' + ' ' + userInfo.email);
-			
 		// }
+		return(
+			<View>
+				<Text style = {stylesheet.styleText}>Welcome {userInfo.email}!</Text>
+				<Button title='Start Ridesharing!'
+					onPress={onPressHandler}
+				/>
+			</View>
+		)
 		}
 		else{
 			return(
@@ -208,9 +221,6 @@ function Launch({ navigation }) {
 						}
 	  }
 
-    const onPressHandler = () => {
-      navigation.navigate('Home');
-    }
 
     return (
       	<SafeAreaView>

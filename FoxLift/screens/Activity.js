@@ -256,7 +256,9 @@ export function UpcomingRides({ navigation }) {
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handlePress(item)}>
-				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
+				<Text style = {stylesheet.textTrips}>
+					{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type}
+				</Text>
 			</TouchableOpacity>
           )}
         />
@@ -303,7 +305,7 @@ export function PastRides({ navigation }) {
           data={data}
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
-			<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
+			<Text style = {stylesheet.textTrips}>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
           )}
         />
 		)}
@@ -367,7 +369,7 @@ export function UserRides({ navigation }) {
 	//getusertrips endpoint for user specific rides
 	const getUserTrips = async () => {
 		try {
-		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uid=' + newUID);
+		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uID=' + newUID);
 		 const json = await response.json();
 		 setData(json);
 	   } catch (error) {
@@ -392,7 +394,7 @@ export function UserRides({ navigation }) {
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handlePress(item)}>
-				<Text>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
+				<Text style = {stylesheet.textTrips}>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
 			</TouchableOpacity>
           )}
         />
@@ -539,6 +541,12 @@ const stylesheet = StyleSheet.create({
     marginTop: 16,
     borderRadius: 4,
   },
+  textTrips: {
+	borderWidth: 1,
+	paddingTop: 10,
+	paddingBottom: 10,
+	
+  }
 
  
  
