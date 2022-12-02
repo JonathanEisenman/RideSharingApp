@@ -232,16 +232,17 @@ export function UpcomingRides({ navigation }) {
 		  }}
 		/>
 
-
+<View style = {{flexDirection:'row'}}>
 <TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMin}>
-			<Text style = {stylesheet.buttonText}> Select Minimum Time </Text>
+			<Text style = {{textAlign: 'center'}}> Select Minimum Time </Text>
         </TouchableOpacity>	 
-		<Text> Minimum Time: {dateMin} </Text>
 
 		<TouchableOpacity style = {stylesheet.button} onPress = {showDatePickerMax}>
-			<Text style = {stylesheet.buttonText}> Select Maximum Time </Text>
+			<Text style = {{textAlign: 'center'}}> Select Maximum Time </Text>
         </TouchableOpacity>
-		<Text> Maximum Time: {dateMax} </Text>
+		</View>
+		<Text style = {{paddingTop: 10}}> Minimum Time: {dateMin} </Text>
+		<Text style = {{paddingTop: 10}}> Maximum Time: {dateMax} </Text>
 
 		<DateTimePickerModal
               isVisible={isDatePickerVisibleMin}
@@ -256,14 +257,16 @@ export function UpcomingRides({ navigation }) {
               onCancel={hideDatePickerMax}
             />	
 
-
+		<View style = {{flexDirection:'row'}}>
+			
 		<TouchableOpacity style = {stylesheet.button} onPress = {filteredTripsDestination}> 
-                <Text style = {stylesheet.buttonText}> Filter </Text>
+                <Text style = {{textAlign: 'center'}}> Filter </Text>
         </TouchableOpacity>	
 		<TouchableOpacity style = {stylesheet.button} onPress = {resetFilters}> 
-                <Text style = {stylesheet.buttonText}> Reset Filter </Text>
+                <Text style = {{textAlign: 'center'}}> Reset Filter </Text>
         </TouchableOpacity>	
-
+		</View>
+		<View style = {{height: 330}}>
 		{isLoading ? <ActivityIndicator/> : (
 		<FlatList
           data={data}
@@ -277,6 +280,7 @@ export function UpcomingRides({ navigation }) {
           )}
         />
 		)}
+		</View>
 		</View>
 	)
 }
@@ -331,6 +335,8 @@ export function UserRides({ navigation }) {
 
 	const [isLoading, setLoading] = useState(true);
 	const [data, setData] = useState([]);
+	const [data2, setData2] = useState([]);
+	const [data3, setData3] = useState([]);
 
 	const backToActivity = () => {
 		navigation.navigate('Activity');
@@ -353,7 +359,7 @@ export function UserRides({ navigation }) {
 	}
 
 	const completeRide = (tID) => {
-		fetch("http://10.10.9.188:3000/updatetrips?isCompleted&tID=" + tID,{
+		fetch("http://10.10.9.188:3000/updatetrips?isCompleted=1&tID=" + tID,{
         method:"put",
         header:{
           Accept:"application/json",
@@ -362,12 +368,15 @@ export function UserRides({ navigation }) {
       }).then((res)=>{
         if(res.ok){
           console.log("User completed ride.");
+		  getUserTrips();
+		getCompletedUserTrips();
+		getCancelledUserTrips();
         }
       })
 	}
 
 	const cancelRide = (tID) => {
-		fetch("http://10.10.9.188:3000/updatetrips?isCancelled&tID=" + tID,{
+		fetch("http://10.10.9.188:3000/updatetrips?isCancelled=1&tID=" + tID,{
         method:"put",
         header:{
           Accept:"application/json",
@@ -376,6 +385,9 @@ export function UserRides({ navigation }) {
       }).then((res)=>{
         if(res.ok){
           console.log("User cancelled ride.");
+		  getUserTrips();
+		getCompletedUserTrips();
+		getCancelledUserTrips();
         }
       })
 	}
@@ -383,7 +395,7 @@ export function UserRides({ navigation }) {
 	//getusertrips endpoint for user specific rides
 	const getUserTrips = async () => {
 		try {
-		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uID=' + newUID);
+		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uID=' + newUID + '&isCompleted=0&isCancelled=0');
 		 const json = await response.json();
 		 setData(json);
 	   } catch (error) {
@@ -393,23 +405,74 @@ export function UserRides({ navigation }) {
 	   }
 	}
 
+	const getCompletedUserTrips = async () => {
+		try {
+		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uID=' + newUID + '&isCompleted=1&isCancelled=0');
+		 const json = await response.json();
+		 setData2(json);
+	   } catch (error) {
+		 console.error(error);
+	   } finally {
+		 setLoading(false);
+	   }
+	}
+
+	const getCancelledUserTrips = async () => {
+		try {
+		 const response = await fetch('http://10.10.9.188:3000/getusertrips?uID=' + newUID + '&isCompleted=0&isCancelled=1');
+		 const json = await response.json();
+		 setData3(json);
+	   } catch (error) {
+		 console.error(error);
+	   } finally {
+		 setLoading(false);
+	   }
+	}
+
 	useEffect(() => {
 		getUserTrips();
+		getCompletedUserTrips();
+		getCancelledUserTrips();
+		const focusedScreen = navigation.addListener('focus', () => {
+			getUserTrips();
+		getCompletedUserTrips();
+		getCancelledUserTrips();
+		  });
 	  }, []);
 
 	  
 	  return (
 		<View style={{ flex: 1, padding: 24 }}>
 
-
+		<Text>Ongoing Trips:</Text>
 		{isLoading ? <ActivityIndicator/> : (
 		<FlatList
           data={data}
           keyExtractor={({ tID }, index) => tID}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => handlePress(item)}>
-				<Text style = {stylesheet.textTrips}>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type + "\n"}</Text>
+				<Text style = {stylesheet.textTrips}>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type}</Text>
 			</TouchableOpacity>
+          )}
+        />
+		)}
+		<Text>Completed Trips:</Text>
+		{isLoading ? <ActivityIndicator/> : (
+		<FlatList
+          data={data2}
+          keyExtractor={({ tID }, index) => tID}
+          renderItem={({ item }) => (
+			<Text style = {stylesheet.textTrips}>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type}</Text>
+          )}
+        />
+		)}
+		<Text>Cancelled Trips:</Text>
+		{isLoading ? <ActivityIndicator/> : (
+		<FlatList
+          data={data3}
+          keyExtractor={({ tID }, index) => tID}
+          renderItem={({ item }) => (
+			<Text style = {stylesheet.textTrips}>{item.startLocation + ' ' + item.destination + ' ' + formatDate(item.time) + ' '+ item.type}</Text>
           )}
         />
 		)}
@@ -554,6 +617,7 @@ const stylesheet = StyleSheet.create({
     paddingVertical: 12,
     marginTop: 16,
     borderRadius: 4,
+	width: '50%',
   },
   textTrips: {
 	borderWidth: 1,

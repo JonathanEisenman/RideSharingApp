@@ -38,10 +38,12 @@ WebBrowser.maybeCompleteAuthSession();
 
 	Okay so fixing bugs and making it look pretty and adding favorite destinations needs to be done then we good!
 	(DONE) Filter button for location should be google places autocomplete so user doesn't have to type in everything.
-	Your trips update to have two separate gets: Current Rides: Ones not completed or cancelled Past Rides: Ones completed or cancelled.
+	(DONE) Your trips update to have two separate gets: Current Rides: Ones not completed or cancelled Past Rides: Ones completed or cancelled.
 	Something about mode of transportations.
 	Add a star icon next to the destination for the button rather than just a set favorite button.
-	Chat doesn't re-get on open
+	(DONE) Chat doesn't re-get on open
+	Inline buttons to remove cluttered screen space
+	chat shows account names
 */
 
 var newUID = 0;
@@ -154,12 +156,12 @@ function Launch({ navigation }) {
 		.then((res)=>{
 		  if(res.ok){
 			console.log("User added to database");
+			getCurrUser();
 		  }
 		  
 		})
 	  }}
 	  else{}
-	  //getCurrUrser();
 	}
 
 	  const getCurrUser = async()=>{
@@ -167,8 +169,7 @@ function Launch({ navigation }) {
 		if (userInfo){
 			const response = await fetch('http://10.10.9.188:3000/getusers?email=' + userInfo.email);
 		 	const json = await response.json();
-          	setData(json[0].uID);
-		  	newUID = data;
+          	newUID = json[0].uID;
 			console.log(newUID);
 			//isIdSet = true;
       	}
@@ -186,7 +187,7 @@ function Launch({ navigation }) {
 	  const showUserInfo = () => {
 		if (userInfo) {
 		postUser();
-		getCurrUser();
+		//getCurrUser();
 		// 	if(isIdSet == false){
 		// 	//doesEmailExist();
 		// 	//getCurrUser();	

@@ -95,6 +95,28 @@ function Chat({ navigation }) {
   //               <Text> Send </Text>
   //     </TouchableOpacity>	
 
+  const getTextStyle = (message) => {
+    if(message.senderID == newUID) {
+     return {
+      borderWidth: 1,
+      paddingTop: 10,
+      paddingBottom: 10,
+      paddingRight:10,
+      backgroundColor: 'lightblue',
+      textAlign: "right"
+     }
+    } 
+    else {
+      return {
+        borderWidth: 1,
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 10,
+        backgroundColor: "lightgray",
+      }
+    }
+   }
+
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
@@ -118,11 +140,12 @@ function Chat({ navigation }) {
 
       {isLoading ? <ActivityIndicator/> : (
 		<FlatList
+          style={{flex: 1}}
           data={data}
           keyExtractor={({ messageID }, index) => messageID}
           renderItem={({ item }) => (
-				<Text style = {stylesheet.textTrips}>
-					{"Message: " + item.message + '\nTimeStamp: ' +  formatDate2(item.time)}
+				<Text style = {getTextStyle(item)}>
+					{item.message + '\n\n' +  formatDate2(item.time)}
 				</Text>
           )}
         />
@@ -235,8 +258,14 @@ const stylesheet = StyleSheet.create({
     borderWidth: 1,
     paddingTop: 10,
     paddingBottom: 10,
-    
-    },
+    color: "blue",
+  },
+  textTrips2: {
+    borderWidth: 1,
+    paddingTop: 10,
+    paddingBottom: 10,
+    color: "gray",
+  },
     button: {
       backgroundColor: "gray",
       paddingVertical: 12,
