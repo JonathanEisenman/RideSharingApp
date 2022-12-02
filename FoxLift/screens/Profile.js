@@ -9,6 +9,7 @@ import {
   TextInput,
   SafeAreaView,
   Switch,
+  ActivityIndicator,
   FlatList,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -36,7 +37,10 @@ function Profile({ navigation }) {
 	}
 
 	useEffect(() => {
-		getProfile();
+		const focusedScreen = navigation.addListener('focus', () => {
+			getProfile();
+		});
+		
 	}, []);
 
 	const toSettings = () => {
@@ -135,11 +139,37 @@ function Profile({ navigation }) {
 }
 
 export function Favorites({ navigation }) {
+
+	const [isLoading, setLoading] = useState(true);
+	const [data, setData] = useState([]);
+
+	const getFavorites = async () => {
+		try {
+		 const response = await fetch('http://10.10.9.188:3000/getfavorite?uID=' + newUID);
+		 const json = await response.json();
+		 setData(json);
+	   } catch (error) {
+		 console.error(error);
+	   } finally {
+		 setLoading(false);
+	   }
+	}
+
+	useEffect(() => {
+		getFavorites();
+	  }, []);
+
 	return (
 		<SafeAreaView>
-			<Text>
-				Please enter a location to add to your favorites
-			</Text>
+		{isLoading ? <ActivityIndicator/> : (
+		<FlatList
+          data={data}
+          keyExtractor={({ tID }, index) => tID}
+          renderItem={({ item }) => (
+			<Text style = {stylesheet.textFavorites}>{item.location + "\n"}</Text>
+          )}
+        />
+		)}
 		</SafeAreaView>
 	)
 }
@@ -387,34 +417,6 @@ styleInput2: {
 },
 
 
-styleProfileIcon: {
-	position: "absolute",
-	top: 750,
-	right: 0,
-
-},
-
-styleActivityIcon: {
-	position: "absolute",
-	top: 750,
-	left: 50,
-
-},
-
-styleHomeIcon: {
-	position: "absolute",
-	top: 750,
-	left: 0,
-
-},
-
-styleMessagesIcon: {
-	position: "absolute",
-	top: 750,
-	right: 50,
-
-},
-
 styleContainer: {
 	marginTop: 10,
 	position: "absolute",
@@ -436,6 +438,12 @@ styleAccountText: {
 	marginBottom: 20,
 	textAlign: 'center',
 },
+textFavorites: {
+	borderWidth: 1,
+	paddingTop: 10,
+	paddingBottom: 10,
+	
+  },
 
 })
 
