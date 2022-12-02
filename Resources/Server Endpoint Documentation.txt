@@ -10,6 +10,7 @@ GET Endpoints:
 	/getrate
 	/getreport
 	/getmessage
+	/getfavorite
 	
 	# These endpoints use 'OR' between parameters
 	# Example: SELECT * FROM trips WHERE isCompleted=1 OR isCancelled=1
@@ -20,6 +21,7 @@ GET Endpoints:
 	/getrateor
 	/getreportor
 	/getmessageor
+	/getfavoriteor
 
     # Other GET Endpoints
 	/getopentrips
@@ -29,9 +31,9 @@ GET Endpoints:
 	    # http://10.10.9.188:3000/getopentrips?uID=1
 
 	/getusertrips
-	    # Takes parameter "uID", returns trips the user has joined
-	    # Example: SELECT * FROM trips WHERE tID IN (SELECT tID FROM take WHERE uID=1)
-	    # http://10.10.9.188:3000/getusertrips?uID=1
+	    # Takes parameter "uID", "isCancelled", and "isCompleted", and returns trips the user has joined with those 
+	    # Example: SELECT * FROM trips WHERE tID IN (SELECT tID FROM take WHERE uID=1) AND isCompleted=0 and isCancelled=0
+	    # http://10.10.9.188:3000/getusertrips?uID=1&isCompleted=0&isCancelled=0
 
 	/getuserstomessage
 	    # Takes parameter "uID", returns users on trips that the user is on and can message
@@ -106,4 +108,15 @@ POST Endpoints:
 		  "time" : "2022-09-04 17:30:00",
 		  "senderID" : "1",
 		  "receiverID" : "3"
+		});
+
+	/postfavorite
+	    # Adds a user's favorite location to the database
+	    # Example: INSERT INTO favorite (uID, location) VALUES ('1', 'Test Location')
+	    # http://10.10.9.188:3000/postfavorite
+	    # POST Request Details:
+		Headers:	"Content-Type", "applicaiton/json"
+		Body:		JSON.stringify({
+		  "uID" : "1",
+		  "location" : "Test Location"
 		});
