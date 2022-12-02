@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Button, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Keyboard, TextInput} from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import styled from 'styled-components';
 import {newUID} from './Launch';
 
@@ -11,8 +13,7 @@ var chatUID = 0;
 function Messages ({navigation}) {
 
   const [isLoading, setLoading] = useState(true);
-  const [messages, setMessages] = useState([]);
-  const [friendUid, setUid] = useState();
+  const [data, setData] = useState([]);
 
   const formatDate = (dateString) => {
 		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
@@ -26,7 +27,7 @@ function Messages ({navigation}) {
       try {
       const response = await fetch('http://10.10.9.188:3000/getuserstomessage?uID=' + newUID);
       const json = await response.json();
-      setMessages(json);
+      setData(json);
       } catch (error) {
       console.error(error);
       } finally {
@@ -39,19 +40,18 @@ function Messages ({navigation}) {
     }, []);
 
 
-    const chatWithUser = (connectedUser) => {
-
-      setUid(connectedUser.uID);
-      chatUID = friendUid;
-      console.log("friend: " + friendUid);
-      console.log(chatUID);
+    // Bug: Why is it taking the previous chatUID instead of the current? (FIXED)
+    const chatWithUser = (data) => {
+      chatUID = data.uID;
+      console.log("Friend ID: " + chatUID);
       navigation.navigate('Chat');
     }
 
     return (
-      <Container>
+      <View>
+        {isLoading ? <ActivityIndicator/> : (
         <FlatList 
-          data={messages}
+          data={data}
           keyExtractor={({ uID }, index) => uID}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => chatWithUser(item)}>
@@ -61,7 +61,8 @@ function Messages ({navigation}) {
 			      </TouchableOpacity>
           )}
         />
-      </Container>
+        )}
+    </View>
     );
 };
 

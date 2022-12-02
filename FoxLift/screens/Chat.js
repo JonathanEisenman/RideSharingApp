@@ -1,10 +1,13 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, ScrollView, Text, Button, StyleSheet, ActivityIndicator, TextInput, TouchableOpacity, FlatList} from 'react-native';
+import React, {useState, useEffect, useCallback, Component} from 'react';
+import {View, ScrollView, Text, Button, StyleSheet, ActivityIndicator, TextInput, TouchableOpacity, FlatList, Keyboard} from 'react-native';
 import {Bubble, GiftedChat, Send} from 'react-native-gifted-chat';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { withNavigation } from "react-navigation";
 import {newUID} from './Launch';
 import { chatUID } from './Messages';
+import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
+
 
 function Chat({ navigation }) {
   const [messages, setMessages] = useState([]);
@@ -12,9 +15,11 @@ function Chat({ navigation }) {
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
+
+
   //Need specific query to fetch messages between current user and other users that are in the same ride
   //Have the same tID in the take table
-  const getMessages = async () => {
+  const getChat = async () => {
     try {
     const response = await fetch('http://10.10.9.188:3000/getmessagesbetweenusers?uID1=' + newUID + '&uID2=' + chatUID);
     const json = await response.json();
@@ -27,7 +32,15 @@ function Chat({ navigation }) {
   };
 
   useEffect(() => {
-    getMessages();
+    getChat();
+    const focusedScreen = navigation.addListener('focus', () => {
+      getChat();
+      // The screen is focused
+      // Call any action
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return focusedScreen;
   }, []);
 
   const padTo2Digits = (num) => {
@@ -71,7 +84,9 @@ function Chat({ navigation }) {
       }).then((res)=>{
         if(res.ok){
           console.log("New message created: " + messageText);
-          getMessages();
+          getChat();
+          //so the keyboard goes away after clicking send
+          Keyboard.dismiss();
           onChangeText('');
         }
       })
@@ -79,7 +94,6 @@ function Chat({ navigation }) {
   // <TouchableOpacity onPress = {() => sendMessage(value)}> 
   //               <Text> Send </Text>
   //     </TouchableOpacity>	
-
 
 
   return (
