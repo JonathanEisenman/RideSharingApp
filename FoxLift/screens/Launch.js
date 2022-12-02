@@ -27,7 +27,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 /*
 	TODO: 
-	Chat and Messages functionality: For specifically the current user.
+	(DONE) Chat and Messages functionality: For specifically the current user.
 	(Message now displays account names you currently have trips in common with)
 	(Chat needs more work. Getting messages, and a text input that also posts messages, I can use a timeout to refresh the get every 5 seconds.)
 	(DONE) Filtering upcoming trips by time range.
@@ -35,6 +35,13 @@ WebBrowser.maybeCompleteAuthSession();
 	(DONE) Activity Page History: Show specifically the currents user's rides. Touchable opacity: complete ride or cancel ride.
 	(DONE) Fix up the weird bugs on launch (double alert message)
 	(I think ok) Google places autocomplete weird bug
+
+	Okay so fixing bugs and making it look pretty and adding favorite destinations needs to be done then we good!
+	(DONE) Filter button for location should be google places autocomplete so user doesn't have to type in everything.
+	Your trips update to have two separate gets: Current Rides: Ones not completed or cancelled Past Rides: Ones completed or cancelled.
+	Something about mode of transportations.
+	Add a star icon next to the destination for the button rather than just a set favorite button.
+	Chat doesn't re-get on open
 */
 
 var newUID = 0;
