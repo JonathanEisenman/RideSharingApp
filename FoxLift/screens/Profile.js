@@ -95,19 +95,10 @@ function Profile({ navigation }) {
 				)}
 				/>
 			</View>
-			<TouchableOpacity onPress={toAccountInfo}>
-				<View style = {stylesheet.styleWrapButton}>
-					<View style = {stylesheet.styleButton}>
-						<Text style = {stylesheet.styleText}>
-							{`Account Information`}
-						</Text>
-					</View>
-				</View>	
-			</TouchableOpacity>
 			
 			<TouchableOpacity onPress={toFavorites}>
-				<View style = {stylesheet.styleWrapButtonCopy4}>
-					<View style = {stylesheet.styleButtonCopy4}>
+				<View style = {stylesheet.styleWrapButton}>
+					<View style = {stylesheet.styleButton}>
 						<Text style = {stylesheet.styleText}>
 							{`Favorites`}
 						</Text>
@@ -140,6 +131,16 @@ function Profile({ navigation }) {
 	
 	
 		
+	)
+}
+
+export function Favorites({ navigation }) {
+	return (
+		<SafeAreaView>
+			<Text>
+				Please enter a location to add to your favorites
+			</Text>
+		</SafeAreaView>
 	)
 }
 
@@ -196,56 +197,6 @@ export function Settings({ navigation }) {
 
 }
 
-
-export function AccountInformation({ navigation }) {
-
-	const backToProfile = () => {
-		navigation.navigate('Profile');
-	}
-
-	
-
-	//https://reactnative.dev/docs/handling-text-input
-	const [isEnabled, setIsEnabled] = useState(false);
-	const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-	return (
-		<SafeAreaView>
-			<Text>First Name:</Text>
-			<TextInput style={stylesheet.styleInput}
-			placeholder="First Name"
-			/>
-
-			<Text>Last Name:</Text>
-			<TextInput style={stylesheet.styleInput}
-			placeholder="Last Name"
-			/>
-
-			<Text>Email:</Text>
-			<TextInput style={stylesheet.styleInput}
-			placeholder="Email Address"
-			/>
-
-			<Text>Account Name:</Text>
-			<TextInput style={stylesheet.styleInput}
-			placeholder="Account Name"
-			/>
-
-			<Text>Do you have a car?</Text>
-			<Switch
-        	trackColor={{ false: "#767577", true: "#81b0ff" }}
-        	thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-        	ios_backgroundColor="#3e3e3e"
-        	onValueChange={toggleSwitch}
-        	value={isEnabled}
-      	/>
-			<Button title='Done'
-			onPress={backToProfile}
-			/>
-		</SafeAreaView>
-		
-	)
-}
 
 export function TermsConditions({ navigation }) {
 	const backToProfile = () => {

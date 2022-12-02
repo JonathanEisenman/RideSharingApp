@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS foxlift;
+
+USE foxlift;
+
+source backup.sql
+
+DROP USER IF EXISTS 'foxliftapp'@'localhost';
+CREATE USER 'foxliftapp'@'localhost' IDENTIFIED BY 'FoxLiftApp2022!';
+GRANT INSERT, UPDATE, DELETE ON foxlift.* TO 'foxliftapp'@'localhost';
