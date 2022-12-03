@@ -148,10 +148,10 @@ function Home({ navigation }) {
       moveTo(position);
     };
 
-    const edgePaddingValue = 10;
+    const edgePaddingValue = 20;
 
     const edgePadding = {
-      top: edgePaddingValue,
+      top: edgePaddingValue + 320,
       bottom: edgePaddingValue,
       left: edgePaddingValue,
       right: edgePaddingValue,
@@ -307,8 +307,8 @@ useEffect(()=>{
                 origin={origin}
                 destination={destination}
                 apikey={GOOGLE_MAPS_API_KEY}
-                strokeWidth = {2}
-                strokeColor = "hotpink"
+                strokeWidth = {4}
+                strokeColor = "red"
                 onReady = {traceRouteOnReady}
               />}
 
@@ -323,48 +323,49 @@ useEffect(()=>{
                   onPlaceSelected(data, details, "destination")
                 }}/>
                 
-                <View style = {{flexDirection: "row"}}>
-                  <View style = {{flexDirection: "column"}}> 
-                    <Text> Add Destination to Favorites</Text>
-                     
-                  <TouchableOpacity onPress = {() => {postFavorites()}}>
-                    <MaterialCommunityIcons
-                      name="star-circle"
-                      style={{marginTop: 2, marginLeft: 5}}
-                      size={38}
-                      color="red"
-                    />
-                  </TouchableOpacity>	
-                    </View> 
-
-
-                <View style = {{flexDirection: "column"}}> 
-                  <TouchableOpacity onPress = {showDatePicker}>
-                  <Text> Select a Date for Ride</Text> 
+                <View style = {{flexDirection: "row", justifyContent: "center"}}>
+                    <TouchableOpacity onPress = {showDatePicker}>
+                  <Text> Select a Date</Text>
                   <MaterialCommunityIcons
                     name="calendar-month"
                     size={38}
                     color="red"
                   />
                   </TouchableOpacity>
-              </View>
+
+                    
+                  <TouchableOpacity onPress = {() => {postFavorites()}}>
+                    <Text> Add to Favorites</Text>
+                    <MaterialCommunityIcons
+                      name="star-circle"
+                      size={38}
+                      color="red"
+                    />
+                  </TouchableOpacity>	
+
+
+
 
               </View>
  
+              {distance && duration ? (
+              <View> 
+                <Text style = {stylesheet.text}> Distance: {distance.toFixed(2)} miles </Text>
+                <Text style = {stylesheet.text}> Duration: {Math.ceil(duration)} min </Text>
+              </View>
+              ): null}
+
+              <View style = {{flexDirection: "row"}}>
               <TouchableOpacity style = {stylesheet.button} onPress = {traceRoute}> 
                 <Text style = {stylesheet.buttonText}> Trace Route</Text>
               </TouchableOpacity>
 
-              {distance && duration ? (
-              <View> 
-                <Text style = {stylesheet.distanceText}> Distance: {distance.toFixed(2)} miles </Text>
-                <Text style = {stylesheet.durationText}> Duration: {Math.ceil(duration)} min </Text>
-              </View>
-              ): null}
+
 
             <TouchableOpacity style = {stylesheet.button} onPress = { () => {createRideShare()}}>
                 <Text style = {stylesheet.buttonText}> Confirm Ride</Text>
-            </TouchableOpacity>   
+            </TouchableOpacity>
+            </View>   
 
 
             <DateTimePickerModal
@@ -396,8 +397,8 @@ useEffect(()=>{
   },
 
   map:{
-    top: 365,
-    height: 400,
+    //top: 265,
+    height: 770,
     marginVertical: 0,
     width:SCREEN_WIDTH,
   },
@@ -414,6 +415,7 @@ useEffect(()=>{
     padding: 8,
     borderRadius: 8,
     top: 0,
+    borderWidth: 1,
   },
 
   input: {
@@ -426,18 +428,15 @@ useEffect(()=>{
     paddingVertical: 10,
     marginTop: 16,
     borderRadius: 4,
+    borderWidth: 1,
+    width: "50%",
   },
 
   buttonText: {
     textAlign: "center",
   },
 
-  distanceText: {
-    paddingTop: 20,
-    textAlign: "center",
-  },
-
-  durationText: {
+  text: {
     textAlign: "center",
   }
 
