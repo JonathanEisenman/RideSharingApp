@@ -151,7 +151,7 @@ function Home({ navigation }) {
     const edgePaddingValue = 20;
 
     const edgePadding = {
-      top: edgePaddingValue + 320,
+      top: edgePaddingValue + 300,
       bottom: edgePaddingValue,
       left: edgePaddingValue,
       right: edgePaddingValue,
@@ -323,7 +323,7 @@ useEffect(()=>{
                   onPlaceSelected(data, details, "destination")
                 }}/>
                 
-                <View style = {{flexDirection: "row", justifyContent: "center"}}>
+                <View style = {{flexDirection: "row", justifyContent: "space-between"}}>
                     <TouchableOpacity onPress = {showDatePicker}>
                   <Text> Select a Date</Text>
                   <MaterialCommunityIcons
@@ -333,7 +333,13 @@ useEffect(()=>{
                   />
                   </TouchableOpacity>
 
-                    
+                  {distance && duration ? (
+                  <View> 
+                    <Text style = {stylesheet.distanceText}> Distance: {distance.toFixed(2)} miles </Text>
+                    <Text style = {stylesheet.durationText}> Duration: {Math.ceil(duration)} min </Text>
+                  </View>
+                  ): null}
+
                   <TouchableOpacity onPress = {() => {postFavorites()}}>
                     <Text> Add to Favorites</Text>
                     <MaterialCommunityIcons
@@ -348,12 +354,7 @@ useEffect(()=>{
 
               </View>
  
-              {distance && duration ? (
-              <View> 
-                <Text style = {stylesheet.text}> Distance: {distance.toFixed(2)} miles </Text>
-                <Text style = {stylesheet.text}> Duration: {Math.ceil(duration)} min </Text>
-              </View>
-              ): null}
+
 
               <View style = {{flexDirection: "row"}}>
               <TouchableOpacity style = {stylesheet.button} onPress = {traceRoute}> 
@@ -436,7 +437,12 @@ useEffect(()=>{
     textAlign: "center",
   },
 
-  text: {
+  distanceText: {
+    paddingTop: 10,
+    textAlign: "center",
+  },
+
+  durationText: {
     textAlign: "center",
   }
 
