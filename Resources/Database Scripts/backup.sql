@@ -182,7 +182,7 @@ CREATE TABLE `trips` (
 
 LOCK TABLES `trips` WRITE;
 /*!40000 ALTER TABLE `trips` DISABLE KEYS */;
-INSERT INTO `trips` VALUES (1,'Ride Share','Target','Donnelly','2022-09-04 17:30:00',4,1,0),(2,'Taxi','Fox Run','Donnelly','2022-09-05 12:30:00',4,0,1),(3,'Ride Share','Hancock','North End','2022-09-06 16:30:00',4,0,0);
+INSERT INTO `trips` VALUES (1,'Ride Share','Target, South Road, Poughkeepsie, NY, USA','Marist College, North Road, Poughkeepsie, NY, USA','2022-09-04 17:30:00',4,1,0),(2,'Taxi','Taco Bell, Main Street, Poughkeepsie, NY, USA','Marist College, North Road, Poughkeepsie, NY, USA','2022-09-05 12:30:00',4,0,1),(3,'Ride Share','Starbucks, South Road, Poughkeepsie, NY, USA','Marist College, North Road, Poughkeepsie, NY, USA','2022-09-06 16:30:00',4,0,0);
 /*!40000 ALTER TABLE `trips` ENABLE KEYS */;
 UNLOCK TABLES;
 
