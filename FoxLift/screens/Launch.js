@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   FlatList,
+  Alert,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import * as Google from "expo-auth-session/providers/google";
@@ -190,6 +191,42 @@ function Launch({ navigation }) {
 			navigation.navigate('Home');
 		  }
 
+		const handleUserRole = () => {
+			Alert.alert('Select User Role', 'Do you have a car to use for this app?', [
+				{ text: 'No',  onPress: () => setUserRole(0)},
+				{ text: 'Yes', onPress: () => setUserRole(1)},
+			  ]);
+		}
+
+		const setUserRole = (num) => {
+			if (num == 0) {
+				fetch("http://10.10.9.188:3000/updateusers?isDriver=0&uID=" + newUID,{
+					method:"put",
+					header:{
+					  Accept:"application/json",
+					  "Content-Type":"application/json",
+					},
+				  }).then((res)=>{
+					if(res.ok){
+					  console.log("Not a driver updated.");
+					}
+				  })
+			}
+			else {
+				fetch("http://10.10.9.188:3000/updateusers?isDriver=1&uID=" + newUID,{
+					method:"put",
+					header:{
+					  Accept:"application/json",
+					  "Content-Type":"application/json",
+					},
+				  }).then((res)=>{
+					if(res.ok){
+					  console.log("Is a driver updated.");
+					}
+				  })
+			}
+		}
+		
 
 	  const showUserInfo = () => {
 		if (userInfo) {
@@ -216,10 +253,13 @@ function Launch({ navigation }) {
 		// }
 		return(
 			<SafeAreaView>
+				<Text>Welcome {userInfo.email}!</Text>
+				<Button title = "Select User Role"
+					onPress={handleUserRole}
+				/>
 				<Button title='Start Ridesharing!'
 					onPress={onPressHandler}
 				/>
-				<Text>Welcome {userInfo.email}!</Text>
 			</SafeAreaView>
 		)
 		}

@@ -19,6 +19,7 @@ import Constants from 'expo-constants';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Modal, ModalContent } from 'react-native-modals';
 import { mapStyle } from '../globals/MapStyle';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {newUID} from './Launch';
 
@@ -147,10 +148,10 @@ function Home({ navigation }) {
       moveTo(position);
     };
 
-    const edgePaddingValue = 10;
+    const edgePaddingValue = 20;
 
     const edgePadding = {
-      top: edgePaddingValue,
+      top: edgePaddingValue + 300,
       bottom: edgePaddingValue,
       left: edgePaddingValue,
       right: edgePaddingValue,
@@ -170,11 +171,6 @@ function Home({ navigation }) {
       }
     }
 
-    const addToFavorites = (destination) => {
-      if (destination) {
-        console.log("A new favorite has been added: ", destination);
-      }      
-    }
 
     const createRideShare = () =>  {
       //Only allow to create a ride share when origin and destination are selected
@@ -186,7 +182,21 @@ function Home({ navigation }) {
       //Call to add trip into the database
         postTrips();
 
-
+      }
+      else if (showDirections) {
+        Alert.alert('No Date Selected', 'You must select a date before confirm ride.', [
+          { text: 'Ok',  },
+        ]);
+      }
+      else if (date) {
+        Alert.alert('Route Not Traced', 'You must trace your route before confirming ride.', [
+          { text: 'Ok',  },
+        ]);
+      }
+      else {
+        Alert.alert('Cannot Confirm Ride', 'You must trace your route and select a date before confirming ride.', [
+          { text: 'Ok',  },
+        ]);
       }
 
     }
@@ -210,6 +220,32 @@ function Home({ navigation }) {
           console.log("Trip added to database");
         }
       })
+    }
+
+    const postFavorites = async() => {
+      if (destination) {
+        fetch("http://10.10.9.188:3000/postfavorite",{
+        method:"post",
+        header:{
+          Accept:"application/json",
+          "Content-Type":"application/json",
+        },
+        body:JSON.stringify({
+          uID: newUID.toString(),
+          location: destinationName,
+        }),
+      }).then((res)=>{
+        if(res.ok){
+          console.log("Favorite added to database");
+        }
+      })
+      }
+      else {
+        Alert.alert('Cannot Add to Favorite', 'You must select a destination in order to add to favorites', [
+          { text: 'Ok',  },
+        ]);
+      }
+
     }
 
   const checkPermission =async()=>{
@@ -240,15 +276,7 @@ function Home({ navigation }) {
   
       }
   }
-/*
-  const promptUser = () => {
-    Alert.alert('Alert Title', 'Do you have a car to use?', [
-      {
-        text: 'No', onPress: () => setUserRole('Passenger') },
-      { text: 'Yes', onPress: () => setUserRole('Driver') },
-    ]);
-  };
-*/
+
   
 const mapRef = useRef(1)
 
@@ -279,8 +307,8 @@ useEffect(()=>{
                 origin={origin}
                 destination={destination}
                 apikey={GOOGLE_MAPS_API_KEY}
-                strokeWidth = {2}
-                strokeColor = "hotpink"
+                strokeWidth = {4}
+                strokeColor = "red"
                 onReady = {traceRouteOnReady}
               />}
 
@@ -290,33 +318,56 @@ useEffect(()=>{
               <InputAutoComplete label = "Origin" onPlaceSelected = {(data, details) => {
                 onPlaceSelected(data, details, "origin")
               }}/>
-              <InputAutoComplete label = "Destination" onPlaceSelected = {(data, details) => {
-                onPlaceSelected(data, details, "destination")
-              }}/>
+                
+                <InputAutoComplete label = "Destination" onPlaceSelected = {(data, details) => {
+                  onPlaceSelected(data, details, "destination")
+                }}/>
+                
+                <View style = {{flexDirection: "row", justifyContent: "space-between"}}>
+                    <TouchableOpacity onPress = {showDatePicker}>
+                  <Text> Select a Date</Text>
+                  <MaterialCommunityIcons
+                    name="calendar-month"
+                    size={38}
+                    color="red"
+                  />
+                  </TouchableOpacity>
 
-              
-              <TouchableOpacity style = {stylesheet.button} onPress = {showDatePicker}> 
-                <Text style = {stylesheet.buttonText}> Select Date for Ride</Text>
-              </TouchableOpacity>
+                  {distance && duration ? (
+                  <View> 
+                    <Text style = {stylesheet.distanceText}> Distance: {distance.toFixed(2)} miles </Text>
+                    <Text style = {stylesheet.durationText}> Duration: {Math.ceil(duration)} min </Text>
+                  </View>
+                  ): null}
 
+                  <TouchableOpacity onPress = {() => {postFavorites()}}>
+                    <Text> Add to Favorites</Text>
+                    <MaterialCommunityIcons
+                      name="star-circle"
+                      size={38}
+                      color="red"
+                    />
+                  </TouchableOpacity>	
+
+
+
+
+              </View>
+ 
+
+
+              <View style = {{flexDirection: "row"}}>
               <TouchableOpacity style = {stylesheet.button} onPress = {traceRoute}> 
                 <Text style = {stylesheet.buttonText}> Trace Route</Text>
               </TouchableOpacity>
 
-              {distance && duration ? (
-              <View> 
-                <Text style = {stylesheet.distanceText}> Distance: {distance.toFixed(2)} miles </Text>
-                <Text style = {stylesheet.durationText}> Duration: {Math.ceil(duration)} min </Text>
-              </View>
-              ): null}
+
 
             <TouchableOpacity style = {stylesheet.button} onPress = { () => {createRideShare()}}>
                 <Text style = {stylesheet.buttonText}> Confirm Ride</Text>
-            </TouchableOpacity>      
+            </TouchableOpacity>
+            </View>   
 
-            <TouchableOpacity style = {stylesheet.button} onPress = { () => {addToFavorites(destinationName)}}>
-                <Text style = {stylesheet.buttonText}> Add Destination To Favorites</Text>
-            </TouchableOpacity> 
 
             <DateTimePickerModal
               isVisible={isDatePickerVisible}
@@ -347,8 +398,8 @@ useEffect(()=>{
   },
 
   map:{
-    top: 365,
-    height: 400,
+    //top: 265,
+    height: 770,
     marginVertical: 0,
     width:SCREEN_WIDTH,
   },
@@ -365,6 +416,7 @@ useEffect(()=>{
     padding: 8,
     borderRadius: 8,
     top: 0,
+    borderWidth: 1,
   },
 
   input: {
@@ -373,10 +425,12 @@ useEffect(()=>{
   },
 
   button: {
-    backgroundColor: "gray",
-    paddingVertical: 12,
+    backgroundColor: "red",
+    paddingVertical: 10,
     marginTop: 16,
     borderRadius: 4,
+    borderWidth: 1,
+    width: "50%",
   },
 
   buttonText: {
@@ -384,7 +438,7 @@ useEffect(()=>{
   },
 
   distanceText: {
-    paddingTop: 20,
+    paddingTop: 10,
     textAlign: "center",
   },
 

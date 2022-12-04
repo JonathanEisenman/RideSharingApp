@@ -18,6 +18,7 @@ const launchName = 'Launch';
 const homeName = 'Home';
 const activityName = 'Activity';
 const messagesName = 'Messages';
+const chatName = 'Chat';
 const profileName = 'Profile';
 
 const Tab = createBottomTabNavigator();
@@ -75,6 +76,9 @@ export default function MainContainer(){
                     else if (routeName === messagesName) {
                         iconName = focused ? 'message-text' : 'message-text-outline'
                     }
+                    else if (routeName === chatName) {
+                        iconName = focused ? 'message-text' : 'message-text-outline'
+                    }
                     else if (routeName === profileName) {
                         iconName = focused ? 'account' : 'account-outline'
                     }
@@ -108,8 +112,9 @@ export default function MainContainer(){
                 <Tab.Screen name={homeName} component={Home} options={{ headerShown: false }}/>
                 <Tab.Screen name={activityName} component={ActivityStackScreen} />
                 <Tab.Screen name={messagesName} component={Messages} />
+                <Tab.Screen name={chatName} component={Chat} />
                 <Tab.Screen name={profileName} component={ProfileStackScreen} />
-                <Tab.Screen name="Chat" component={Chat} />
+
                 
                 
 

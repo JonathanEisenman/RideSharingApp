@@ -133,7 +133,7 @@ function Chat({ navigation }) {
 			        value={value}
 			   />
 
-<TouchableOpacity onPress = {() => sendMessage(value)}> 
+      <TouchableOpacity onPress = {() => sendMessage(value)}> 
           <MaterialCommunityIcons
             name="send-circle"
             style={{marginTop: 2, marginLeft: 5}}

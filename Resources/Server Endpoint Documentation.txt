@@ -57,6 +57,11 @@ PUT Endpoints:
 	    # Updates an entry into the take table identified by the tID
 	    # Example: UPDATE trips SET isCompleted=1 WHERE tID=1
 	    # http://10.10.9.188:3000/updatetrips?tID=1&isCompleted=1;
+
+	/updateusers
+	    # Updates an entry in the users table identified by the uID
+	    # Example: UPDATE users SET isDriver=1 WHERE uID=4
+	    # http://10.10.9.188:3000/updatetrips?uID=4&isDriver=1;
 	
 
 POST Endpoints:
