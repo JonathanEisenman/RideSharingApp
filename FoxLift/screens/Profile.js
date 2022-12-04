@@ -165,6 +165,14 @@ export function Favorites({ navigation }) {
 
 	useEffect(() => {
 		getFavorites();
+		const focusedScreen = navigation.addListener('focus', () => {
+			getFavorites();
+			// The screen is focused
+			// Call any action
+		  });
+	  
+		  // Return the function to unsubscribe from the event so it gets removed on unmount
+		  return focusedScreen;
 	  }, []);
 
 	return (
