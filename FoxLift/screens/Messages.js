@@ -48,6 +48,14 @@ function Messages ({navigation}) {
   
     useEffect(() => {
       getMessages();
+      const focusedScreen = navigation.addListener('focus', () => {
+        getMessages();
+        // The screen is focused
+        // Call any action
+      });
+  
+      // Return the function to unsubscribe from the event so it gets removed on unmount
+      return focusedScreen;
     }, []);
 
 
@@ -64,7 +72,7 @@ function Messages ({navigation}) {
         {isLoading ? <ActivityIndicator/> : (
         <FlatList 
           data={data}
-          ListEmptyComponent={_listEmptyComponent()}
+          //ListEmptyComponent={_listEmptyComponent()}
           keyExtractor={({ uID }, index) => uID}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => chatWithUser(item)}>
@@ -72,7 +80,9 @@ function Messages ({navigation}) {
                 {item.accountName}
             </Text>
 			      </TouchableOpacity>
+            
           )}
+          ListEmptyComponent={_listEmptyComponent()}
         />
         )}
     </View>
