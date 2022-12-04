@@ -29,8 +29,6 @@ const MessagesStack = createStackNavigator();
 const ProfileStackScreen = () => (
         <ProfileStack.Navigator>
             <ProfileStack.Screen name = "Profile2" component = {Profile} options={{ headerShown: false }}/>
-            <ProfileStack.Screen name = "Settings" component = {Settings} />
-            <ProfileStack.Screen name = "Terms and Conditions" component = {TermsConditions} />
             <ProfileStack.Screen name = "Favorites" component = {Favorites} />
         </ProfileStack.Navigator>
 )

@@ -11,6 +11,7 @@ import {
   Switch,
   ActivityIndicator,
   FlatList,
+  Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NavigationActions } from 'react-navigation';
@@ -51,13 +52,6 @@ function Profile({ navigation }) {
 		navigation.navigate('Launch');
 	}
 
-	const toTermsConditions = () => {
-		navigation.navigate('Terms and Conditions');
-	}
-
-	const toAccountInfo = () => {
-		navigation.navigate('Account Information');
-	}
 
 	const onPressHandlerActivity = () => {
 		navigation.navigate('Activity');
@@ -81,6 +75,12 @@ function Profile({ navigation }) {
 		} else {
 			return "Driver";
 		}
+	}
+
+	const alertUser = () => {
+		Alert.alert('Warning', 'FoxLift IS NOT RESPONSIBLE FOR THINGS THAT CAN GO WRONG DURING A RIDE SHARE!', [
+			{ text: 'Ok',  },
+		  ]);
 	}
 
 	return (
@@ -110,7 +110,7 @@ function Profile({ navigation }) {
 				</View>	
 			</TouchableOpacity>
 
-			<TouchableOpacity onPress={toTermsConditions}>
+			<TouchableOpacity onPress={alertUser}>
 				<View style = {stylesheet.styleWrapButtonCopy2}>
 					<View style = {stylesheet.styleButtonCopy2}>
 						<Text style = {stylesheet.styleText}>
@@ -171,76 +171,6 @@ export function Favorites({ navigation }) {
         />
 		)}
 		</SafeAreaView>
-	)
-}
-
-export function Settings({ navigation }) {
-
-	const backToProfile = () => {
-		navigation.navigate('Profile');
-	}
-
-	const toLaunch = () => {
-		navigation.navigate('Launch');
-	}
-
-	const toTermsConditions = () => {
-		navigation.navigate('Terms and Conditions');
-	}
-
-	return (
-		// <SafeAreaView>
-		// 	<TextInput style={stylesheet.styleInput}
-		// 	placeholder="TestSettings"
-		// />
-		<SafeAreaView>
-		<TouchableOpacity onPress={toTermsConditions}>
-				<View style = {stylesheet.styleWrapButtonCopy2}>
-					<View style = {stylesheet.styleButtonCopy2}>
-						<Text style = {stylesheet.styleText}>
-							{`Terms and Conditions`}
-						</Text>
-					</View>
-				</View>	
-		</TouchableOpacity>
-
-		<TouchableOpacity onPress={toLaunch}>
-				<View style = {stylesheet.styleWrapButton}>
-					<View style = {stylesheet.styleButton}>
-						<Text style = {stylesheet.styleText}>
-							{`Logout`}
-						</Text>
-					</View>
-				</View>	
-		</TouchableOpacity>
-
-
-		<Button title='Done'
-		onPress={backToProfile}
-		/>
-	</SafeAreaView>
-
-
-	)
-
-
-
-}
-
-
-export function TermsConditions({ navigation }) {
-	const backToProfile = () => {
-		navigation.navigate('Profile');	
-	}
-	return (
-		<SafeAreaView>
-			<Text>WE ARE NOT RESPONSIBLE FOR THINGS THAT CAN GO WRONG DURING A RIDE SHARE!</Text>
-			
-			<Button title='Done'
-			onPress={backToProfile}
-			/>
-		</SafeAreaView>
-		
 	)
 }
 
