@@ -22,6 +22,15 @@ function Messages ({navigation}) {
 		return new Date(dateString).toLocaleDateString(undefined, options)
 	  };	
 
+  const _listEmptyComponent = () => {
+      return (
+          <View>
+              <Text style = {{padding: 50, alignContent: 'center', textAlign: 'center', fontSize: 18, backgroundColor: '#ffcccb', color: 'black', fontStyle: 'bold'}}>Start a rideshare to connect with other users!</Text>
+          </View>
+      )
+  }
+  
+
   //Query to messages table based on the user id
   //Will return all of the message information, when user clicks on a certain message there will be another query
   //To display only the message and the date
@@ -55,6 +64,7 @@ function Messages ({navigation}) {
         {isLoading ? <ActivityIndicator/> : (
         <FlatList 
           data={data}
+          ListEmptyComponent={_listEmptyComponent()}
           keyExtractor={({ uID }, index) => uID}
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => chatWithUser(item)}>

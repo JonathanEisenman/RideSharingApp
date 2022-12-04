@@ -17,6 +17,7 @@ import * as WebBrowser from "expo-web-browser";
 import * as AuthSession from 'expo-auth-session';
 import Constants from 'expo-constants';
 import { uniqueNamesGenerator, Config, adjectives, colors, animals } from 'unique-names-generator';
+import { CurrentRenderContext } from '@react-navigation/native';
 
 export {newUID};
 
@@ -253,13 +254,19 @@ function Launch({ navigation }) {
 		// }
 		return(
 			<SafeAreaView>
-				<Text>Welcome {userInfo.email}!</Text>
+				<View>
+				<Text style = {{padding: 60, alignContent: 'center', textAlign: 'center', fontSize: 18}}>Welcome {userInfo.email}!</Text>
+				</View>
+				<View style = {{paddingTop: 50, backgroundColor: 'lightgreen'}}>
 				<Button title = "Select User Role"
 					onPress={handleUserRole}
 				/>
+				</View>
+				<View style = {{padding: 50, backgroundColor: 'lightgreen'}}>
 				<Button title='Start Ridesharing!'
 					onPress={onPressHandler}
 				/>
+				</View>
 			</SafeAreaView>
 		)
 		}
