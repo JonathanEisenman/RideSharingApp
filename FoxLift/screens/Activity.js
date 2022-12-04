@@ -248,8 +248,6 @@ export function UpcomingRides({ navigation }) {
 			<Text style = {{textAlign: 'center'}}> Select Maximum Time </Text>
         </TouchableOpacity>
 		</View>
-		<Text style = {{paddingTop: 10}}> Minimum Time: {dateMin} </Text>
-		<Text style = {{paddingTop: 10}}> Maximum Time: {dateMax} </Text>
 
 		<DateTimePickerModal
               isVisible={isDatePickerVisibleMin}
@@ -310,7 +308,7 @@ export function PastRides({ navigation }) {
 			var helsenkiTime = new Date(date.getTime()+ helsenkiOffset + userOffset).toLocaleDateString(undefined, options);
 			return helsenkiTime;
 
-			
+
 	}	 
 
 	const getTrips = async () => {

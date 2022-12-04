@@ -25,14 +25,6 @@ function Profile({ navigation }) {
 	const [isLoading, setLoading] = useState(true);
 	const [data, setData] = useState([]);
 
-	const _listEmptyComponent = () => {
-		return (
-			<View>
-				<Text style = {{padding: 50, alignContent: 'center', textAlign: 'center', fontSize: 18, backgroundColor: '#ffcccb', color: 'black', fontStyle: 'bold'}}>Add favorite locations using the Home page!</Text>
-			</View>
-		)
-	}
-
 	const getProfile = async () => {
 		try {
 			const response = await fetch('http://10.10.9.188:3000/getusers?uid=' + newUID);
@@ -151,6 +143,14 @@ export function Favorites({ navigation }) {
 	const [isLoading, setLoading] = useState(true);
 	const [data, setData] = useState([]);
 
+	const _listEmptyComponent = () => {
+		return (
+			<View>
+				<Text style = {{padding: 50, alignContent: 'center', textAlign: 'center', fontSize: 18, backgroundColor: '#ffcccb', color: 'black', fontStyle: 'bold'}}>Add favorite locations by adding them to Home page!</Text>
+			</View>
+		)
+	}
+
 	const getFavorites = async () => {
 		try {
 		 const response = await fetch('http://10.10.9.188:3000/getfavorite?uID=' + newUID);
@@ -176,7 +176,9 @@ export function Favorites({ navigation }) {
           renderItem={({ item }) => (
 			<Text style = {stylesheet.textFavorites}>{item.location + "\n"}</Text>
           )}
+		  ListEmptyComponent={_listEmptyComponent()}
         />
+
 		)}
 		</SafeAreaView>
 	)
