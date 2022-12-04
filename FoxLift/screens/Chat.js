@@ -69,8 +69,15 @@ function Chat({ navigation }) {
 
     const formatDate2 = (date) => {
 			date = date.replace('T',' ').replace('Z','');
+      
     return date;
 		  }	  
+      const formatDate3 = (date) =>{
+        var _date = new Date(date);
+			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", timeZone: 'EST'}
+			var helsenkiTime = new Date(_date.getTime()).toLocaleDateString(undefined, options);
+			return helsenkiTime;
+      }
 
   const sendMessage = (messageText) => {
 		fetch("http://10.10.9.188:3000/postmessage",{
@@ -150,7 +157,7 @@ function Chat({ navigation }) {
           keyExtractor={({ messageID }, index) => messageID}
           renderItem={({ item }) => (
 				<Text style = {getTextStyle(item)}>
-					{item.message + '\n\n' +  formatDate2(item.time)}
+					{item.message + '\n\n' +  formatDate3(item.time)}
 				</Text>
           )}
         />

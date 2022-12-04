@@ -83,7 +83,7 @@ export function UpcomingRides({ navigation }) {
   
 		const formatDate = (dateString) => {
 			var date = new Date(dateString);
-			var currentHelsinkiHoursOffset = -10; // sometimes it is 3
+			var currentHelsinkiHoursOffset = -10; 
 			var helsenkiOffset = currentHelsinkiHoursOffset*60*60000;
 			var userOffset = date.getTimezoneOffset()*60000;
 			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", timeZone: 'EST'}
@@ -302,9 +302,15 @@ export function PastRides({ navigation }) {
 	}
 
 	const formatDate = (dateString) => {
-		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
-		options.timeZone = "EST";
-		return new Date(dateString).toLocaleDateString(undefined, options)
+		var date = new Date(dateString);
+			var currentHelsinkiHoursOffset = -10; 
+			var helsenkiOffset = currentHelsinkiHoursOffset*60*60000;
+			var userOffset = date.getTimezoneOffset()*60000;
+			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", timeZone: 'EST'}
+			var helsenkiTime = new Date(date.getTime()+ helsenkiOffset + userOffset).toLocaleDateString(undefined, options);
+			return helsenkiTime;
+
+			
 	}	 
 
 	const getTrips = async () => {
@@ -351,8 +357,13 @@ export function UserRides({ navigation }) {
 	}
 
 	const formatDate = (dateString) => {
-		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric"}
-		return new Date(dateString).toLocaleDateString(undefined, options)
+		var date = new Date(dateString);
+			var currentHelsinkiHoursOffset = -10; 
+			var helsenkiOffset = currentHelsinkiHoursOffset*60*60000;
+			var userOffset = date.getTimezoneOffset()*60000;
+			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", timeZone: 'EST'}
+			var helsenkiTime = new Date(date.getTime()+ helsenkiOffset + userOffset).toLocaleDateString(undefined, options);
+			return helsenkiTime;
 	}
 
 	const handlePress = (data) => {

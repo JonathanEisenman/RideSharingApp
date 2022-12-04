@@ -18,8 +18,13 @@ function Messages ({navigation}) {
   const [data, setData] = useState([]);
 
   const formatDate = (dateString) => {
-		const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric"}
-		return new Date(dateString).toLocaleDateString(undefined, options)
+		var date = new Date(dateString);
+			var currentHelsinkiHoursOffset = -10; 
+			var helsenkiOffset = currentHelsinkiHoursOffset*60*60000;
+			var userOffset = date.getTimezoneOffset()*60000;
+			const options = { year: "numeric", month: "numeric", day: "numeric", hour: "numeric", minute: "numeric", timeZone: 'EST'}
+			var helsenkiTime = new Date(date.getTime()+ helsenkiOffset + userOffset).toLocaleDateString(undefined, options);
+			return helsenkiTime;
 	  };	
 
   const _listEmptyComponent = () => {
