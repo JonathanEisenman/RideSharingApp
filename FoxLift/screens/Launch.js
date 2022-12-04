@@ -40,10 +40,17 @@ WebBrowser.maybeCompleteAuthSession();
 	(DONE) Filter button for location should be google places autocomplete so user doesn't have to type in everything.
 	(DONE) Your trips update to have two separate gets: Current Rides: Ones not completed or cancelled Past Rides: Ones completed or cancelled.
 	Something about mode of transportations.
-	Add a star icon next to the destination for the button rather than just a set favorite button.
+	(DONE) Add a star icon next to the destination for the button rather than just a set favorite button.
 	(DONE) Chat doesn't re-get on open
-	Inline buttons to remove cluttered screen space
-	chat shows account names
+	(DONE) Inline buttons to remove cluttered screen space
+
+
+	(DONE) Chat shows account name on top maybe
+	Launch make it look better after signing in
+	(DONE) set isDriver in launch after logging in
+	Home make it look a little better
+	Destination post check
+	getMessages reload after 5 seconds without blowing up server
 */
 
 var newUID = 0;

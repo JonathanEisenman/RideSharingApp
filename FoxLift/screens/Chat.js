@@ -5,7 +5,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { withNavigation } from "react-navigation";
 import {newUID} from './Launch';
-import { chatUID } from './Messages';
+import { chatUID, friendName } from './Messages';
 import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 
@@ -14,7 +14,6 @@ function Chat({ navigation }) {
   const [value, onChangeText] = React.useState('');
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
-
 
 
   //Need specific query to fetch messages between current user and other users that are in the same ride
@@ -29,10 +28,15 @@ function Chat({ navigation }) {
     } finally {
     setLoading(false);
     }
+
+  //   setTimeout(() => {
+  //     console.log("5 sec refresh.")
+  //     getChat();
+  // }, 5000);
   };
 
   useEffect(() => {
-    getChat();
+    //getChat();
     const focusedScreen = navigation.addListener('focus', () => {
       getChat();
       // The screen is focused
@@ -120,6 +124,7 @@ function Chat({ navigation }) {
 
   return (
     <View style={{ flex: 1, padding: 24 }}>
+      <Text style = {{textAlign: 'center', fontSize: 18, paddingBottom: 10}}>{friendName}</Text>
       <View style = {{ flexDirection:'row' }}>
       <TextInput style = {stylesheet.input}
                placeholder = ""

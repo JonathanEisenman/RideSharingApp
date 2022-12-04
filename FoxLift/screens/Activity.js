@@ -205,6 +205,7 @@ export function UpcomingRides({ navigation }) {
       }).then((res)=>{
         if(res.ok){
           console.log("User added to existing trip.");
+		  navigation.navigate('Messages');
         }
       })
 	}
