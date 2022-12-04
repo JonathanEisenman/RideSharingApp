@@ -6,9 +6,11 @@ import styled from 'styled-components';
 import {newUID} from './Launch';
 
 export {chatUID};
+export {friendName};
 
 
 var chatUID = 0;
+var friendName = "";
 
 function Messages ({navigation}) {
 
@@ -43,7 +45,8 @@ function Messages ({navigation}) {
     // Bug: Why is it taking the previous chatUID instead of the current? (FIXED)
     const chatWithUser = (data) => {
       chatUID = data.uID;
-      console.log("Friend ID: " + chatUID);
+      friendName = data.accountName;
+      console.log("Friend ID: " + chatUID + " Name: " + friendName);
       navigation.navigate('Chat');
     }
 
