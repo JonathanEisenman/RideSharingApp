@@ -2,8 +2,8 @@ GET Endpoints:
     # All these endpoints can be sent parameters that are column names
 
 	# These endpoints use 'AND' between parameters
-	# Example: SELECT * FROM users WHERE uid="1" AND name="Anthony"
-	# http://10.10.9.188:3000/getusers?uid=1&name=Anthony
+	# Example: SELECT * FROM users WHERE uID="1" AND name="Anthony"
+	# http://10.10.9.188:3000/getusers?uID=1&name=Anthony
 	/getusers
 	/gettrips
 	/gettake
@@ -37,7 +37,7 @@ GET Endpoints:
 
 	/getuserstomessage
 	    # Takes parameter "uID", returns users on trips that the user is on and can message
-	    # Example: SELECT * FROM users WHERE uID IN (SELECT uID FROM take WHERE tID IN (SELECT tID FROM take WHERE uID=1))
+	    # Example: SELECT * FROM users WHERE uID IN (SELECT uID FROM take WHERE tID IN (SELECT tID FROM take WHERE uID=1)) AND uID!=1
 	    # http://10.10.9.188:3000/getuserstomessage?uID=1
 
 	/getmessagesbetweenusers
@@ -61,7 +61,7 @@ PUT Endpoints:
 	/updateusers
 	    # Updates an entry in the users table identified by the uID
 	    # Example: UPDATE users SET isDriver=1 WHERE uID=4
-	    # http://10.10.9.188:3000/updatetrips?uID=4&isDriver=1;
+	    # http://10.10.9.188:3000/updateusers?uID=4&isDriver=1;
 	
 
 POST Endpoints:
