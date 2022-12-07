@@ -75,7 +75,7 @@ exports.getfavoriteOrRequest = function(req, res) {
 exports.getopenTripsRequest = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     var query = 'SELECT * FROM trips WHERE isCompleted = 0 AND isCancelled = 0 AND SeatsAvailable > 0 ' +
-                    'AND tID NOT IN (SELECT tID FROM take WHERE uID=\'' + reqUrl.query["uID"] + '\')';
+                    'AND tID NOT IN (SELECT tID FROM take WHERE uID=\"' + reqUrl.query["uID"] + '\")';
     // Execute the query
     console.log(query);
     executeQuery(res, query);
@@ -83,8 +83,8 @@ exports.getopenTripsRequest = function(req, res) {
 
 exports.getuserTripsRequest = function(req, res) {
     const reqUrl = url.parse(req.url, true);
-    var query = 'SELECT * FROM trips WHERE tID IN (SELECT tID FROM take WHERE uID=\'' + reqUrl.query["uID"] + '\')' +
-                ' AND isCompleted=\'' + reqUrl.query["isCompleted"] + '\' AND isCancelled=\'' + reqUrl.query["isCancelled"] + '\'';
+    var query = 'SELECT * FROM trips WHERE tID IN (SELECT tID FROM take WHERE uID=\"' + reqUrl.query["uID"] + '\")' +
+                ' AND isCompleted=\"' + reqUrl.query["isCompleted"] + '\" AND isCancelled=\"' + reqUrl.query["isCancelled"] + '\"';
     // Execute the query
     console.log(query);
     executeQuery(res, query);
@@ -92,7 +92,7 @@ exports.getuserTripsRequest = function(req, res) {
 
 exports.getusersToMessageRequest = function(req, res) {
     const reqUrl = url.parse(req.url, true);
-    var query = 'SELECT * FROM users WHERE uID IN (SELECT uID FROM take WHERE tID IN (SELECT tID FROM take WHERE uID=\'' + reqUrl.query["uID"] + '\'))';
+    var query = 'SELECT * FROM users WHERE uID IN (SELECT uID FROM take WHERE tID IN (SELECT tID FROM take WHERE uID=\"' + reqUrl.query["uID"] + '\")) AND uID!=\"' + reqUrl.query["uID"] + '\"';
     // Execute the query
     console.log(query);
     executeQuery(res, query);
@@ -102,8 +102,8 @@ exports.getmessagesBetweenUsers = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     var uID1 = reqUrl.query["uID1"];
     var uID2 = reqUrl.query["uID2"];
-    var query = 'SELECT * FROM message WHERE (senderID=\'' + uID1 + '\' AND receiverID=\'' + uID2 + '\')' + 
-                ' OR (senderID=\'' + uID2 + '\' AND receiverID=\'' + uID1 + '\') ORDER BY time ASC';
+    var query = 'SELECT * FROM message WHERE (senderID=\"' + uID1 + '\" AND receiverID=\"' + uID2 + '\")' + 
+                ' OR (senderID=\"' + uID2 + '\" AND receiverID=\"' + uID1 + '\") ORDER BY time ASC';
     // Execute the query
     console.log(query);
     executeQuery(res, query);
@@ -112,8 +112,8 @@ exports.getmessagesBetweenUsers = function(req, res) {
 exports.gettripsRangeRequest = function(req, res) {
     const reqUrl = url.parse(req.url, true);
     var query = 'SELECT * FROM trips';
-    query += ' WHERE time>=\'' + reqUrl.query["min"] + '\'';
-    query += ' AND time<=\'' + reqUrl.query["max"] + '\'';
+    query += ' WHERE time>=\"' + reqUrl.query["min"] + '\"';
+    query += ' AND time<=\"' + reqUrl.query["max"] + '\"';
     query += ' AND isCompleted=0 AND isCancelled=0';
     query += ' ORDER BY time ASC';
     console.log(query);
@@ -122,6 +122,10 @@ exports.gettripsRangeRequest = function(req, res) {
 
 exports.updatetripsRequest = function(req, res) {
     putRequest(req, res, "trips", "tID");
+}
+
+exports.updateusersRequest = function(req, res) {
+    putRequest(req, res, "users", "uID");
 }
 
 exports.postusersRequest = function(req, res) {
@@ -133,13 +137,13 @@ exports.postusersRequest = function(req, res) {
     req.on('end', async function() {
         postBody = JSON.parse(body);
 
-        var results1 = await midQuery('SELECT * FROM users WHERE email=\'' + postBody.email + '\'');
+        var results1 = await midQuery('SELECT * FROM users WHERE email=\"' + postBody.email + '\"');
         // console.log(results1[0]);
         if (results1[0] == undefined) {
             var query = 'INSERT INTO users (name, accountName, isDriver, email) VALUES ' + 
             '(' + 
-            '\'' + postBody.name + '\', \'' + postBody.accountName + '\', ' + 
-            '\'' + "0" + '\', \'' + postBody.email + '\'' + 
+            '\"' + postBody.name + '\", \"' + postBody.accountName + '\", ' + 
+            '\"' + "0" + '\", \"' + postBody.email + '\"' + 
             ')';
 
             // Execute the query
@@ -164,7 +168,7 @@ exports.posttripsRequest = async function(req, res) {
     req.on('end', async function() {
         postBody = JSON.parse(body);
 
-        var results2 = await midQuery('SELECT isDriver FROM users WHERE uID=\'' + postBody.uID + '\'');
+        var results2 = await midQuery('SELECT isDriver FROM users WHERE uID=\"' + postBody.uID + '\"');
         var isDriver = results2[0]["isDriver"];
         var UserRole, type;
         if (isDriver) {
@@ -178,11 +182,11 @@ exports.posttripsRequest = async function(req, res) {
 
         var query = 'INSERT INTO trips (tID, type, destination, startLocation, time, seatsAvailable, isCompleted, isCancelled) VALUES ' +
             '(' +
-            '\'' + tID + '\', ' +
-            '\'' + type + '\', \'' + postBody.destination + '\', ' + 
-            '\'' + postBody.startLocation + '\', \'' + postBody.time + '\', ' + 
-            '\'' + '3' + '\', ' +
-            '\'' + '0' + '\', \'' + '0' + '\'' + 
+            '\"' + tID + '\", ' +
+            '\"' + type + '\", \"' + postBody.destination + '\", ' + 
+            '\"' + postBody.startLocation + '\", \"' + postBody.time + '\", ' + 
+            '\"' + '3' + '\", ' +
+            '\"' + '0' + '\", \"' + '0' + '\"' + 
             ')';
 
         // Execute query
@@ -190,8 +194,8 @@ exports.posttripsRequest = async function(req, res) {
         await executeQuery(res, query);
         await midQuery('INSERT INTO take (uID, tID, UserRole) VALUES ' + 
             '(' +
-            '\'' + postBody.uID + '\', \'' + tID + '\', ' +
-            '\'' + UserRole + '\'' +
+            '\"' + postBody.uID + '\", \"' + tID + '\", ' +
+            '\"' + UserRole + '\"' +
             ')'
         );
     });
@@ -206,9 +210,9 @@ exports.jointripsRequest = function(req, res) {
     req.on('end', async function() {
         postBody = JSON.parse(body);
         
-        var results1 = await midQuery('SELECT SeatsAvailable, type FROM trips WHERE tID=\'' + postBody.tID + '\'');
+        var results1 = await midQuery('SELECT SeatsAvailable, type FROM trips WHERE tID=\"' + postBody.tID + '\"');
         var SeatsAvailable = results1[0]["SeatsAvailable"] - 1;
-        await midQuery('UPDATE trips SET SeatsAvailable=\'' + SeatsAvailable + '\' WHERE tID=\'' + postBody.tID + '\'');
+        await midQuery('UPDATE trips SET SeatsAvailable=\"' + SeatsAvailable + '\" WHERE tID=\"' + postBody.tID + '\"');
         var type = results1[0]["type"];
         var UserRole;
         if (type == 'Ride Share') {
@@ -220,8 +224,8 @@ exports.jointripsRequest = function(req, res) {
 
         var query = 'INSERT INTO take (uID, tID, UserRole) VALUES ' +
             '(' +
-            '\'' + postBody.uID + '\', ' +
-            '\'' + postBody.tID + '\', \'' + UserRole + '\'' +
+            '\"' + postBody.uID + '\", ' +
+            '\"' + postBody.tID + '\", \"' + UserRole + '\"' +
             ')';
 
         // Execute query
@@ -241,8 +245,8 @@ exports.postmessageRequest = function(req, res) {
 
         var query = 'INSERT INTO message (message, time, senderID, receiverID) VALUES ' + 
             '(' + 
-            '\'' + postBody.message + '\', \'' + postBody.time + '\', ' + 
-            '\'' + postBody.senderID + '\', \'' + postBody.receiverID + '\'' + 
+            '\"' + postBody.message + '\", \"' + postBody.time + '\", ' + 
+            '\"' + postBody.senderID + '\", \"' + postBody.receiverID + '\"' + 
             ')';
 
             // Execute the query
@@ -262,7 +266,7 @@ exports.postfavoriteRequest = function(req, res) {
 
         var query = 'INSERT INTO favorite (uID, location) VALUES ' + 
             '(' + 
-            '\'' + postBody.uID + '\', \'' + postBody.location + '\'' + 
+            '\"' + postBody.uID + '\", \"' + postBody.location + '\"' + 
             ')';
 
             // Execute the query
@@ -282,11 +286,11 @@ function getRequest(req, res, table, joiner) {
     var query = 'SELECT * FROM ' + table;
     var passedDataKeys = Object.keys(reqUrl.query);
     if (passedDataKeys.length > 0) {
-        query += ' WHERE ' + passedDataKeys[0] + '=\'' + reqUrl.query[passedDataKeys[0]] + '\'';
+        query += ' WHERE ' + passedDataKeys[0] + '=\"' + reqUrl.query[passedDataKeys[0]] + '\"';
     }
     if (passedDataKeys.length > 1) {
         for (var i = 1; i < passedDataKeys.length; i++) {
-            query += ' ' + joiner + ' ' + passedDataKeys[i] + '=\'' + reqUrl.query[passedDataKeys[i]] + '\'';
+            query += ' ' + joiner + ' ' + passedDataKeys[i] + '=\"' + reqUrl.query[passedDataKeys[i]] + '\"';
         }
     }
     // Execute the query
@@ -299,14 +303,14 @@ function putRequest(req, res, table, identifier) {
     var query = 'UPDATE ' + table;
     var passedDataKeys = Object.keys(reqUrl.query);
     if (passedDataKeys.length > 0) {
-        query += ' SET ' + passedDataKeys[0] + '=\'' + reqUrl.query[passedDataKeys[0]] + '\'';
+        query += ' SET ' + passedDataKeys[0] + '=\"' + reqUrl.query[passedDataKeys[0]] + '\"';
     }
     if (passedDataKeys.length > 1) {
         for (var i = 1; i < passedDataKeys.length; i++) {
-            query += ' , ' + passedDataKeys[i] + '=\'' + reqUrl.query[passedDataKeys[i]] + '\'';
+            query += ' , ' + passedDataKeys[i] + '=\"' + reqUrl.query[passedDataKeys[i]] + '\"';
         }
     }
-    query += ' WHERE ' + identifier + '=\'' + reqUrl.query[identifier] + '\'';
+    query += ' WHERE ' + identifier + '=\"' + reqUrl.query[identifier] + '\"';
     // Execute the query
     console.log(query);
     executeQuery(res, query);
