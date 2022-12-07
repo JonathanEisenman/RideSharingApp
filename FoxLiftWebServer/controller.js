@@ -109,8 +109,14 @@ module.exports = http.createServer((req, res) => {
     // PUT TRIPS isCompleted or isCancelled
     // PUT localhost:3000/updatetrips
     else if (reqUrl.pathname == '/updatetrips' && req.method === 'PUT') {
-        console.log('Request Type: ' + req.method + 'Endpoint: ' + reqUrl.pathname);
+        console.log('Request Type: ' + req.method + ' Endpoint: ' + reqUrl.pathname);
         service.updatetripsRequest(req, res);
+    }
+    // PUT USERS isDriver
+    // PUT localhost:3000/updateusers
+    else if (reqUrl.pathname == '/updateusers' && req.method === 'PUT') {
+        console.log('Request Type: ' + req.method + ' Endpoint: ' + reqUrl.pathname);
+        service.updateusersRequest(req, res);
     }
     // POST USERS Endpoint
     // POST localhost:3000/postusers
